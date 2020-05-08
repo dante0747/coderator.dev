@@ -6,7 +6,7 @@ logo: 'assets/images/logo.png'
 favicon: 'assets/images/favicon.ico'
 baseurl:
 google_analytics: 'UA-165959895-1'
-disqus: 'demowebsite'
+disqus: 'coderator'
 mailchimp-list: 'http://eepurl.com/g2QV45'
 include: ["_pages"]
 permalink: /:title/
