@@ -313,6 +313,10 @@ span.post-read-more a:hover {
     margin-bottom: 1rem;
 }
 
+.mainheading img.sitetitle {
+    width: 350px;
+}
+
 .footer {
     border-top: 1px solid rgba(0, 0, 0, .05) !important;
     padding-top: 15px;
