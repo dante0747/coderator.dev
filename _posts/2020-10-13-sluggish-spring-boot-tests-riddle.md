@@ -1,6 +1,6 @@
 ---
 layout: post
-title:  "Sluggish Spring Boot Integration Tests Riddle"
+title:  "Sluggish Spring Boot Tests Riddle"
 author: majid
 categories: [ spring boot, tests, experience ]
 image: assets/images/1.jpg
