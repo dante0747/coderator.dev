@@ -12,7 +12,7 @@ or not integration tests are too slow.
 There was a belief in our squad (and our chapter as well) that integration tests were slow and this belief made us not 
 put this issue in our technical debts backlog and we all accepted it as a fact. It continued until the build time in 
 some microservices exceeded 10 minutes and teammates started complaining about them. The first reaction was avoiding 
-integration tests as much as possible and using unit tests instead. I know that it is not a wise decision which against 
+integration tests as much as possible and using unit tests instead. I know that it is not a wise decision against which 
 there are many arguments, but It was the decision that the team made. In this post, we will see how this issue got 
 resolved and the build time in our microservices decreased to half.
 
@@ -130,34 +130,19 @@ public abstract class AbstractTes{
 }
 ```
 ```java
-public class TestOne extends AbstractTest{
-	//...
-}
-```
-```java
-public class TestTwo extends AbstractTest{
-	//...
-}
-```
-```java
-public class TestThree extends AbstractTest{
-	//...
-}
-```
-```java
-public class TestFour extends AbstractTest{
+public class TestX extends AbstractTest{
 	//...
 }
 ```
 
 Now, in this sample, it only loads the context once. I did something like this in the codebase and counted the context 
-loads again. The result was promising: the number of context loads decreased to 6 (from 16).
+loads again. The result was promising: the number of context loads decreased to 2 (from 16). Note that, for example, if 
+you have a property called **database.url** both in **x.properties** and **z.properties**, the second one overrides the 
+first one.
 
-I got through the remaining test classes. Guess what? All of them contained either **@MockBean** or **@SpyBean**. It is 
-crystal clear that these fancy annotations make the Spring load the context one more time because [every time @MockBean 
-appears in a class, the ApplicationContext cache gets marked as dirty, hence the runner will clean the cache after the 
-test-class is done.](https://www.baeldung.com/spring-tests) Therefore, I removed them from integration test classes and 
-refactored corresponding test cases.
+I got through the remaining test classes. Guess what? All of them contained either **@MockBean** or **@SpyBean**. As I 
+previously mentioned, in a separate blog post I will address the usage of these fancy annotations and the issues they 
+may cause in integration tests.
 
 ## Lesson Learned
 
