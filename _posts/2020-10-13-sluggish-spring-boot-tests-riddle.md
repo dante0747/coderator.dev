@@ -22,9 +22,9 @@ tests that slow?** I started with writing down all the things I was skeptical ab
 
 ## Following the first suspicion
 
-Whenever our tests were running, I saw the Spring logo showing up several times. I thought that @SpringBootTest loaded 
-the full application context per each test class. After a ten-minute search, I realized that all my assumptions were 
-wrong. I found the point in the [Spring docs](https://docs.spring.io/autorepo/docs/spring-framework/4.2.0.RC2/spring-framework-reference/html/integration-testing.html#testcontext-ctx-management-caching):
+Whenever our tests were running, I saw the Spring logo showing up several times. I thought that **@SpringBootTest** 
+loaded the full application context per each test class. After a ten-minute search, I realized that all my assumptions 
+were wrong. I found the point in the [Spring docs](https://docs.spring.io/autorepo/docs/spring-framework/4.2.0.RC2/spring-framework-reference/html/integration-testing.html#testcontext-ctx-management-caching):
 
 > Once the TestContext framework loads an ApplicationContext (or WebApplicationContext) for a test, that context will 
 be cached and reused for all subsequent tests that declare the same unique context configuration within the same test 
