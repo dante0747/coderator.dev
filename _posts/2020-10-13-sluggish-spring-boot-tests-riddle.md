@@ -83,8 +83,7 @@ combinations of property files used for each class. For example:
 public class TestOne{
 	//...
 }
-```
-```java
+
 @TestPropertySource({
     "classpath:z.properties",
     "classpath:y.properties"
@@ -92,8 +91,7 @@ public class TestOne{
 public class TestTwo{
 	//...
 }
-```
-```java
+
 @TestPropertySource({
     "classpath:x.properties",
     "classpath:z.properties"
@@ -101,8 +99,7 @@ public class TestTwo{
 public class TestThree{
 	//...
 }
-```
-```java
+
 @TestPropertySource({
     "classpath:x.properties",
     "classpath:z.properties"
@@ -128,8 +125,7 @@ them in an abstract class that all of them extend. Here is the new style of the 
 public abstract class AbstractTes{
 	//...
 }
-```
-```java
+
 public class TestX extends AbstractTest{
 	//...
 }
