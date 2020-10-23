@@ -4,7 +4,6 @@ title:  "Sluggish Spring Boot Tests Riddle"
 author: majid
 categories: [ spring boot, tests, experience ]
 image: assets/images/1.jpg
-featured: true
 ---
 Most of us have faced beliefs that go unquestioned. Such ideas can vary from small daily matters such as grocery 
 shopping to something as serious as religious matters. In my case, it was a professional belief, specifically whether 
