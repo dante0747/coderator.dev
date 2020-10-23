@@ -63,12 +63,30 @@ ga('send', 'pageview');
 
             <ul class="navbar-nav ml-auto">
 
-                {% if page.url == "/" %}
-                <li class="nav-item active">
-                {% else %}
+                {% if page.url != "/" %}
                 <li class="nav-item">
+                    <a class="nav-link" href="{{ site.baseurl }}/index.html"><i class="fa fa-home home-icon"></i> Home</a>
+                </li>
                 {% endif %}
-                <a class="nav-link" href="{{ site.baseurl }}/index.html">Home</a>
+
+                <li class="nav-item">
+                    <a target="_blank" class="nav-link" href="https://www.linkedin.com/in/majidabarghooei"><i class="fab fa-linkedin linkedin-icon"></i> Linkedin</a>
+                </li>
+
+                <li class="nav-item">
+                    <a target="_blank" class="nav-link" href="https://twitter.com/dante0747"><i class="fab fa-twitter twitter-icon"></i> Twitter</a>
+                </li>
+
+                <li class="nav-item">
+                    <a target="_blank" class="nav-link" href="https://github.com/dante0747"><i class="fab fa-github github-icon"></i> GitHub</a>
+                </li>
+
+                <li class="nav-item">
+                    <a target="_blank" class="nav-link" href="https://stackoverflow.com/users/1377715/majid-abarghooei"><i class="fab fa-stack-overflow stack-overflow-icon"></i> StackOverflow</a>
+                </li>
+
+                <li class="nav-item">
+                    <a target="_blank" class="nav-link" href="https://medium.com/@dante0747"><i class="fab fa-medium medium-icon"></i> Medium</a>
                 </li>
 
                 {% include search-lunr.html %}
