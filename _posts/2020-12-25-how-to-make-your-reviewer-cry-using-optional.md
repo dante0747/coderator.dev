@@ -1,6 +1,6 @@
 ---
 layout: post
-title:  "How to make your reviewer cry using Java Optional"
+title:  "How to Make Your Reviewer Cry Using Java Optional"
 author: majid
 categories: [ java ]
 image: assets/images/2-1.jpg
