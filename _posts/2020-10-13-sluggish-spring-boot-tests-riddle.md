@@ -2,7 +2,7 @@
 layout: post
 title:  "Sluggish Spring Boot Tests Riddle"
 author: majid
-categories: [ spring boot, tests, experience ]
+categories: [ spring boot, java, tests, experience ]
 image: assets/images/1.jpg
 ---
 Most of us have faced beliefs that go unquestioned. Such ideas can vary from small daily matters such as grocery 
