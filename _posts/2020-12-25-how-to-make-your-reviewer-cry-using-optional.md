@@ -89,24 +89,24 @@ The second common pitfall may emerge while using **orElse** or **orElseGet**. It
 however, there is a significant difference not that fancy like the previous one. Let’s have a look at their signatures 
 and corresponding Javadoc:
 
-```text
+```java
 public T orElse(T other)
-If a value is present, returns the value, otherwise returns other.
-Parameters:
-other - the value to be returned, if no value is present. May be null.
-Returns:
-the value, if present, otherwise other
+//If a value is present, returns the value, otherwise returns other.
+//Parameters:
+//other - the value to be returned, if no value is present. May be null.
+//Returns:
+//the value, if present, otherwise other
 ```
 
-```text
+```java
 public T orElseGet(Supplier<? extends T> supplier)
-If a value is present, returns the value, otherwise returns the result produced by the supplying function.
-Parameters:
-supplier - the supplying function that produces a value to be returned
-Returns:
-the value, if present, otherwise the result produced by the supplying function
-Throws:
-NullPointerException - if no value is present and the supplying function is null
+//If a value is present, returns the value, otherwise returns the result produced by the supplying function.
+//Parameters:
+//supplier - the supplying function that produces a value to be returned
+//Returns:
+//the value, if present, otherwise the result produced by the supplying function
+//Throws:
+//NullPointerException - if no value is present and the supplying function is null
 ```
 
 Regarding the above signatures, the first difference is crystal clear: **orElse** accepts a generic object as an 
