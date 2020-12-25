@@ -19,7 +19,7 @@ author of [Java Coding Problems](https://www.amazon.com/gp/product/B07Y9BPV4W/).
 contents you can simply find by googling. I intend to talk about some of the most common and less addressed pitfalls 
 regarding **Optional** usage.
 
-![Code Review Image](../assets/images/2-2.png)
+![Code Review Image](../assets/images/2-2.jpg)
 
 ## What is Optional?
 Before diving into the main subject, let’s review some definitions and see what **Optional** is. As a Java developer, 
