@@ -47,9 +47,9 @@ should always point to an Optional instance.
 So we can extract the following points from the 
 [JavaDoc](https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/util/Optional.html) descriptions:
 + Optional is a container object.
-+ It may not contain a non-null value.
-+ It is mainly used as a return type when using null is troublesome.
-+ The variable with the Optional type should not be null.
++ It may not contain a **non-null** value.
++ It is mainly used as a return type when using **null** is troublesome.
++ The variable with the Optional type should not be **null**.
 
 Keeping in mind these subtle points, you can simply spot most of the **Optional** related code smells. Now, it’s time 
 to go through the four most common **Optional** pitfalls.
