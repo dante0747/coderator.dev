@@ -9,7 +9,7 @@ I think code review is one of the best sources of inspiration. I see it as an op
 other software developers sending pull/merge requests. Moreover, sometimes you may need to study a specific subject 
 with more details regarding the under review code. Usually, this process leads to a more profound knowledge of that 
 domain. However, there's still another fact about code review: after a while, you face some common mistakes. Recently, 
-I reviewed a feature in which I saw an **Optional** pitfall. Honestly, It was several times I saw that issue in 
+I reviewed a feature in which I saw an **Optional** pitfall. Honestly, I had seen that issue several times in 
 different merge requests sent by several developers (from beginners to experienced ones).
 
 ![Code Review Image](../assets/images/2-2.png)
@@ -23,9 +23,9 @@ regarding **Optional** usage.
 
 ## What is Optional?
 Before diving into the main subject, let’s review some definitions and see what **Optional** is. As a Java developer, 
-you should have encountered the famous (and notorious) **NullPointerException** that occurs when you're going to access 
+you should have encountered the infamous **NullPointerException** that occurs when you're going to access 
 a **null** reference. With a quick search, you can find thousands of memes and jokes about null references in Java (and 
-other languages as well). **Optional** came to play in Java 8 to help programmers get rid of all of the problems caused 
+other languages as well). **Optional** came in to play in Java 8 to help programmers get rid of all of the problems caused 
 by **null** references. Have a look at 
 [this article](https://www.oracle.com/technical-resources/articles/java/java8-optional.html), from 
 [Oracle technical resources](https://www.oracle.com/technical-resources/), to read more about the motivation of 
@@ -160,7 +160,7 @@ pass it a complex method.
 
 ## Using orElse(null)
 The other common mistake I usually encounter in code reviews is somehow philosophical; that's using **orElse(null)**. 
-What’s wrong with it? To find the answer let's review the motivation of Optional existence. As I previously mentioned, 
+What’s wrong with it? To find the answer, let's review the motivation of Optional existence. As I previously mentioned, 
 **Optional** exists to help you not to face the problems caused by **null** references such as 
 **NullPointerException**. On the other hand, we also talked about the **orElse** method in the previous section. Now, 
 put these two parts together. Does it make any sense to ask our **Optional** object to return **null** if it’s empty 
@@ -172,7 +172,7 @@ Returning **null**, questions the usage of **Optional**. You may prefer to use a
 first glance, the code seems **null** safe; however, you may face **null** references issues, sooner or later.
 
 ## Returning null in a method with Optional return type
-Before describing the last and most weird case, let’s see how it happens. Let’s get back to the previous example. 
+Before describing the last and weirdest case, let’s see how it happens. Let’s get back to the previous example. 
 Suppose that the **findByCellNumber** is something like this:
 
 ```java
