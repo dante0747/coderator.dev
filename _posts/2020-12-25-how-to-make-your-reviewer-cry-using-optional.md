@@ -90,7 +90,7 @@ however, there is a significant difference not that fancy like the previous one.
 and corresponding Javadoc:
 
 ```text
-public T orElse​(T other)
+public T orElse(T other)
 If a value is present, returns the value, otherwise returns other.
 Parameters:
 other - the value to be returned, if no value is present. May be null.
@@ -99,7 +99,7 @@ the value, if present, otherwise other
 ```
 
 ```text
-public T orElseGet​(Supplier<? extends T> supplier)
+public T orElseGet(Supplier<? extends T> supplier)
 If a value is present, returns the value, otherwise returns the result produced by the supplying function.
 Parameters:
 supplier - the supplying function that produces a value to be returned
@@ -169,7 +169,7 @@ and doesn’t contain a value?
 The **orElse** method is a proper way to return an alternative value in the cases the **Optional** object is empty. 
 Returning **null**, questions the usage of **Optional**. You may prefer to use a **null** reference instead of 
 **Optional**; it's ok, although I never recommend it. However, mixing these two ideas is somehow misleading. At the 
-first glance, the code seems **null** safe; however, you may face **null** references issues, sooner or later.
+first glance, the code seems **null** safe; however, you may face **null** reference issues, sooner or later.
 
 ## Returning null in a method with Optional return type
 Before describing the last and weirdest case, let’s see how it happens. Let’s get back to the previous example. 
