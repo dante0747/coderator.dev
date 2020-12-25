@@ -12,14 +12,14 @@ domain. However, there's still another fact about code review: after a while, yo
 I reviewed a feature in which I saw an **Optional** pitfall. Honestly, I had seen that issue several times in 
 different merge requests sent by several developers (from beginners to experienced ones).
 
-![Code Review Image](../assets/images/2-2.png)
-
 I know that there are tonnes of articles regarding Java **Optional** some of which are quite useful like 
 [this one](https://dzone.com/articles/using-optional-correctly-is-not-optional) (although I have arguments against some 
 of the cases mentioned in the article) by [Anghel Leonard](https://dzone.com/users/196910/anghelleonard.html), the 
 author of [Java Coding Problems](https://www.amazon.com/gp/product/B07Y9BPV4W/). I don't want to repeat all of the 
 contents you can simply find by googling. I intend to talk about some of the most common and less addressed pitfalls 
 regarding **Optional** usage.
+
+![Code Review Image](../assets/images/2-2.png)
 
 ## What is Optional?
 Before diving into the main subject, let’s review some definitions and see what **Optional** is. As a Java developer, 
