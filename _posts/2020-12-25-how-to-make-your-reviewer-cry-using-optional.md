@@ -162,7 +162,7 @@ pass it a complex method.
 The other common mistake I usually encounter in code reviews is somehow philosophical; that's using **orElse(null)**. 
 What’s wrong with it? To find the answer, let's review the motivation of Optional existence. As I previously mentioned, 
 **Optional** exists to help you not to face the problems caused by **null** references such as 
-**NullPointerException**. On the other hand, we also talked about the **orElse** method in the previous section. Now, 
+**NullPointerException**. We also talked about the **orElse** method in the previous section. Now, 
 put these two parts together. Does it make any sense to ask our **Optional** object to return **null** if it’s empty 
 and doesn’t contain a value? 
 
