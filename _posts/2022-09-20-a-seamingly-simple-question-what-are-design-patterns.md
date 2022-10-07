@@ -73,7 +73,9 @@ Patterns are classified based on their scale and abstraction level:
 - Design patterns
 - Idioms
 
-![Pattern Categories](../assets/images/3-2.jpg)
+<p style="text-align: center">
+  <img src="../assets/images/3-2.jpg" alt="Pattern Categories"/>
+</p>
 
 Architectural patterns focus on a whole software system structure, its subsystems, the different broad components and 
 how they fit together. These patterns are at a high level of abstraction. For instance, they don't care what the 
@@ -122,7 +124,9 @@ As you can see in the [following image](https://medium.com/r/?url=https%3A%2F%2F
 different paradigms could share design patterns, but we're not going to address this topic as it's beyond the scope of 
 this article.
 
-![Object Oriented Patterns - Functional Patterns](../assets/images/3-3.jpg)
+<p style="text-align: center">
+  <img src="../assets/images/3-3.jpg" alt="Object Oriented Patterns - Functional Patterns"/>
+</p>
 
 ## Analysing a famous statement
 With the previous sections in mind, let's have a quick look at a statement you may encounter when you simply google 
