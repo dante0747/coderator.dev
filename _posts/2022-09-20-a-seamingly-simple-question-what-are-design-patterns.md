@@ -7,11 +7,11 @@ image: assets/images/3-1.jpg
 ---
 In the software industry, there are a range of topics you hear debates about in almost every company. I believe the 
 design patterns story is one of them. You can find countless posts, articles, and Quora/Stackoverflow answers acting 
-for or against them. For instance, the other day, I came across [this old Quora question](https://medium.com/r/?url=https%3A%2F%2Fwww.quora.com%2FWhy-do-programmers-talk-less-about-design-patterns-now-Which-patterns-if-any-are-still-valuable):
+for or against them. For instance, the other day, I came across [this old Quora question](https://www.quora.com/Why-do-programmers-talk-less-about-design-patterns-now-Which-patterns-if-any-are-still-valuable):
 
 > "Why do programmers talk less about design patterns now? Which patterns (if any) are still valuable?"
 
-The author meant object-oriented design patterns, or the 23 patterns introduced in the [Gang of Four book](https://medium.com/r/?url=https%3A%2F%2Fwww.google.com%2Fbooks%2Fedition%2FDesign_Patterns%2FtmNNfSkfTlcC%3Fhl%3Den%26gbpv%3D1%26dq%3DDesign%2BPatterns%3A%2BElements%2Bof%2BReusable%2BObject-Oriented%2BSoftware%26printsec%3Dfrontcover%23v%3Donepage%26q%3DDesign%2520Patterns%253A%2520Elements%2520of%2520Reusable%2520Object-Oriented%2520Software%26f%3Dfalse), 
+The author meant object-oriented design patterns, or the 23 patterns introduced in the [Gang of Four book](https://www.google.com/books/edition/Design_Patterns/tmNNfSkfTlcC?hl=en&gbpv=1&dq=Design+Patterns:+Elements+of+Reusable+Object-Oriented+Software&printsec=frontcover#v=onepage&q=Design%20Patterns:%20Elements%20of%20Reusable%20Object-Oriented%20Software&f=false), 
 and most of the people who answered the question assumed that this was the case. However, 'the design pattern' is a term 
 that some people use instead of 'object-oriented design patterns'-so don't get shocked when you come across the strange 
 statement: "design patterns are dead".
@@ -34,7 +34,7 @@ A design pattern reminds me that many software engineers have already faced the 
 particular way for several reasons. There's probably a rationale behind it and it gives us the ability to see the 
 problem from a different perspective, even if we don't intend to follow that pattern.
 
-Let's look at a paragraph from the [GoF famous book](https://medium.com/r/?url=https%3A%2F%2Fwww.google.com%2Fbooks%2Fedition%2FDesign_Patterns%2FtmNNfSkfTlcC%3Fhl%3Den%26gbpv%3D1%26dq%3DDesign%2BPatterns%3A%2BElements%2Bof%2BReusable%2BObject-Oriented%2BSoftware%26printsec%3Dfrontcover%23v%3Donepage%26q%3DDesign%2520Patterns%253A%2520Elements%2520of%2520Reusable%2520Object-Oriented%2520Software%26f%3Dfalse)'s introduction:
+Let's look at a paragraph from the [GoF famous book](https://www.google.com/books/edition/Design_Patterns/tmNNfSkfTlcC?hl=en&gbpv=1&dq=Design+Patterns:+Elements+of+Reusable+Object-Oriented+Software&printsec=frontcover#v=onepage&q=Design%20Patterns:%20Elements%20of%20Reusable%20Object-Oriented%20Software&f=false)'s introduction:
 
 > "We all know the value of design experience. How many times have you had design déjà vu-that feeling that you've 
 > solved a problem before but not knowing exactly where or how? If you could remember the details of the previous 
@@ -48,19 +48,19 @@ Now let's dive into some fundamental concepts and definitions.
 
 ## What do patterns mean?
 What is a pattern? The pattern concept is not something specific to our industry. Other disciplines and industries such 
-as architecture, economics, etc. also apply this concept. Let's see the pattern definitions by [Christopher Alexander](https://medium.com/r/?url=https%3A%2F%2Fen.wikipedia.org%2Fwiki%2FChristopher_Alexander), 
+as architecture, economics, etc. also apply this concept. Let's see the pattern definitions by [Christopher Alexander](https://en.wikipedia.org/wiki/Christopher_Alexander), 
 a leading authority in architecture:
 
-> "Each pattern is a three-part rule, which expresses a relation between a certain context, a problem, and a solution." ([Alexander, 1979](https://medium.com/r/?url=https%3A%2F%2Fwww.google.com%2Fbooks%2Fedition%2FThe_Timeless_Way_of_Building%2FH6CE9hlbO8sC%3Fhl%3Den%26gbpv%3D1%26dq%3DThe%2BTimeless%2BWay%2Bof%2BBuilding%26printsec%3Dfrontcover%23v%3Donepage))
+> "Each pattern is a three-part rule, which expresses a relation between a certain context, a problem, and a solution." ([Alexander, 1979](https://www.google.com/books/edition/The_Timeless_Way_of_Building/H6CE9hlbO8sC?hl=en&gbpv=1&dq=The+Timeless+Way+of+Building&printsec=frontcover#v=onepage))
 > 
-> "Each pattern describes a problem which occurs over and over again in our environment, and then describes the core of the solution to that problem, in such a way that you can use this solution a million times over, without ever doing it the same way twice." ([Alexander, 1977](https://medium.com/r/?url=https%3A%2F%2Fwww.google.com%2Fbooks%2Fedition%2FA_Pattern_Language%2FFTpxDwAAQBAJ%3Fhl%3Den%26gbpv%3D1%26dq%3DPattern%2Blanguage%26printsec%3Dfrontcover%23v%3Donepage%26q%26f%3Dfalse))
+> "Each pattern describes a problem which occurs over and over again in our environment, and then describes the core of the solution to that problem, in such a way that you can use this solution a million times over, without ever doing it the same way twice." ([Alexander, 1977](https://www.google.com/books/edition/A_Pattern_Language/FTpxDwAAQBAJ?hl=en&gbpv=1&dq=Pattern+language&printsec=frontcover#v=onepage&q&f=false))
 
 Now let's see what patterns mean in the software industry:
 
 > "A pattern for software architecture describes a particular recurring design problem that arises in specific design 
 > contexts, and presents a well-proven generic scheme for its solution. The solution scheme is specified by describing 
 > its constituent components, their responsibilities and relationships, and the ways in which they collaborate." 
-> ([BMRSS, 96](https://medium.com/r/?url=https%3A%2F%2Fbooks.google.nl%2Fbooks%2Fabout%2FPattern_Oriented_Software_Architecture_A.html%3Fid%3Dj_ahu_BS3hAC%26printsec%3Dfrontcover%26source%3Dkp_read_button%26hl%3Den%26redir_esc%3Dy%23v%3Donepage%26q%26f%3Dfalse))
+> ([BMRSS, 96](https://books.google.nl/books/about/Pattern_Oriented_Software_Architecture_A.html?id=j_ahu_BS3hAC&printsec=frontcover&source=kp_read_button&hl=en&redir_esc=y#v=onepage&q&f=false))
 
 Based on the above definitions, we can consider a pattern as a triad of context, problem, and solution combined with 
 the relationship among them. However, it's a broad concept and can be applied to different scales and abstraction 
@@ -83,13 +83,13 @@ programming language is or what framework is being used.
 
 > "An architectural pattern expresses a fundamental structural organisation schema for software systems. It provides a 
 > set of predefined subsystems, specifies their responsibilities, and includes rules and guidelines for organising the 
-> relationships between them." ([BMRSS, 96](https://medium.com/r/?url=https%3A%2F%2Fbooks.google.nl%2Fbooks%2Fabout%2FPattern_Oriented_Software_Architecture_A.html%3Fid%3Dj_ahu_BS3hAC%26printsec%3Dfrontcover%26source%3Dkp_read_button%26hl%3Den%26redir_esc%3Dy%23v%3Donepage%26q%26f%3Dfalse))
+> relationships between them." ([BMRSS, 96](https://books.google.nl/books/about/Pattern_Oriented_Software_Architecture_A.html?id=j_ahu_BS3hAC&printsec=frontcover&source=kp_read_button&hl=en&redir_esc=y#v=onepage&q&f=false))
 
 On the other hand, we have some patterns in the lowest level of abstraction called idioms which address both design and 
 implementation. Idioms are language-specific meaning that an idiom in language A is irrelevant in language B.
 
 > "An idiom is a low-level pattern specific to a programming language. An idiom describes how to implement particular 
-> aspects of components or the relationships between them using the features of the given language." ([BMRSS, 96](https://medium.com/r/?url=https%3A%2F%2Fbooks.google.nl%2Fbooks%2Fabout%2FPattern_Oriented_Software_Architecture_A.html%3Fid%3Dj_ahu_BS3hAC%26printsec%3Dfrontcover%26source%3Dkp_read_button%26hl%3Den%26redir_esc%3Dy%23v%3Donepage%26q%26f%3Dfalse))
+> aspects of components or the relationships between them using the features of the given language." ([BMRSS, 96](https://books.google.nl/books/about/Pattern_Oriented_Software_Architecture_A.html?id=j_ahu_BS3hAC&printsec=frontcover&source=kp_read_button&hl=en&redir_esc=y#v=onepage&q&f=false))
 
 However, there are still some other patterns that occur between those mentioned above regarding the scale and 
 abstraction level, that's where design patterns come in.
@@ -99,16 +99,16 @@ So let's review the definition of the remaining category:
 
 > "A design pattern provides a scheme for refining the subsystems or components of a software system, or the 
 > relationships between them. It describes a commonly-recurring structure of communicating components that solves a 
-> general design problem within a particular context." ([BMRSS, 96](https://medium.com/r/?url=https%3A%2F%2Fbooks.google.nl%2Fbooks%2Fabout%2FPattern_Oriented_Software_Architecture_A.html%3Fid%3Dj_ahu_BS3hAC%26printsec%3Dfrontcover%26source%3Dkp_read_button%26hl%3Den%26redir_esc%3Dy%23v%3Donepage%26q%26f%3Dfalse))
+> general design problem within a particular context." ([BMRSS, 96](https://books.google.nl/books/about/Pattern_Oriented_Software_Architecture_A.html?id=j_ahu_BS3hAC&printsec=frontcover&source=kp_read_button&hl=en&redir_esc=y#v=onepage&q&f=false))
 
 Design patterns are medium-scale, meaning they're neither highly abstract like architectural patterns, nor coupled to 
 programming languages, like idioms. Applying design patterns doesn't affect the software system structure, but it does 
 impact the subsystems' architecture and its smaller components.
 
-Now, let's discuss the following statement (extracted from the same [reference](https://medium.com/r/?url=https%3A%2F%2Fbooks.google.nl%2Fbooks%2Fabout%2FPattern_Oriented_Software_Architecture_A.html%3Fid%3Dj_ahu_BS3hAC%26printsec%3Dfrontcover%26source%3Dkp_read_button%26hl%3Den%26redir_esc%3Dy%23v%3Donepage%26q%26f%3Dfalse)) 
+Now, let's discuss the following statement (extracted from the same [reference](https://books.google.nl/books/about/Pattern_Oriented_Software_Architecture_A.html?id=j_ahu_BS3hAC&printsec=frontcover&source=kp_read_button&hl=en&redir_esc=y#v=onepage&q&f=false)) 
 containing a crucial fact about design patterns:
 
-> "They tend to be independent of a particular programming language or programming paradigm." ([BMRSS, 96](https://medium.com/r/?url=https%3A%2F%2Fbooks.google.nl%2Fbooks%2Fabout%2FPattern_Oriented_Software_Architecture_A.html%3Fid%3Dj_ahu_BS3hAC%26printsec%3Dfrontcover%26source%3Dkp_read_button%26hl%3Den%26redir_esc%3Dy%23v%3Donepage%26q%26f%3Dfalse))
+> "They tend to be independent of a particular programming language or programming paradigm." ([BMRSS, 96](https://books.google.nl/books/about/Pattern_Oriented_Software_Architecture_A.html?id=j_ahu_BS3hAC&printsec=frontcover&source=kp_read_button&hl=en&redir_esc=y#v=onepage&q&f=false))
 
 According to the pattern category we previously addressed in this article, we'd better rephrase it like this:
 
@@ -120,7 +120,7 @@ programming paradigms. They're likely responses to the deficiencies of paradigms
 object-oriented design patterns described in the GoF book, most of which are not genuine concerns in the functional 
 programming paradigm. But the opposite is also true as the design patterns have different contexts.
 
-As you can see in the [following image](https://medium.com/r/?url=https%3A%2F%2Fblog.ploeh.dk%2F2012%2F05%2F25%2FDesignpatternsacrossparadigms%2F), 
+As you can see in the [following image](https://blog.ploeh.dk/2012/05/25/Designpatternsacrossparadigms/), 
 different paradigms could share design patterns, but we're not going to address this topic as it's beyond the scope of 
 this article.
 
