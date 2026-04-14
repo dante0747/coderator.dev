@@ -399,6 +399,7 @@ img, video { max-width: 100%; height: auto; display: block; }
 .post-content > * + * { margin-top: 1.25rem; }
 
 .post-content h2 {
+  font-family: "Josefin Sans", var(--font-sans);
   font-size: 1.45rem; font-weight: 700;
   margin-top: 3rem; margin-bottom: 1rem;
   color: var(--text);
