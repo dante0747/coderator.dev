@@ -1,0 +1,324 @@
+/* ============================================================
+   Giscus Terminal Theme — coderator.dev
+   Loaded as a custom Giscus theme via data-theme URL.
+   ============================================================ */
+
+:root {
+  /* ── Syntax highlighting ─────────────────────────────────── */
+  --color-prettylights-syntax-comment:                    #5a5a80;
+  --color-prettylights-syntax-constant:                   #c084fc;
+  --color-prettylights-syntax-entity:                     #00d4ff;
+  --color-prettylights-syntax-storage-modifier-import:    #e4e4f0;
+  --color-prettylights-syntax-entity-tag:                 #3dff9a;
+  --color-prettylights-syntax-keyword:                    #00d4ff;
+  --color-prettylights-syntax-string:                     #3dff9a;
+  --color-prettylights-syntax-variable:                   #ffd166;
+  --color-prettylights-syntax-brackethighlighter-unmatched: #ff6b6b;
+  --color-prettylights-syntax-invalid-illegal-text:       #09090f;
+  --color-prettylights-syntax-invalid-illegal-bg:         #ff6b6b;
+  --color-prettylights-syntax-carriage-return-text:       #09090f;
+  --color-prettylights-syntax-carriage-return-bg:         #ff6b6b;
+  --color-prettylights-syntax-string-regexp:              #3dff9a;
+  --color-prettylights-syntax-markup-list:                #ffd166;
+  --color-prettylights-syntax-markup-heading:             #00d4ff;
+  --color-prettylights-syntax-markup-italic:              #e4e4f0;
+  --color-prettylights-syntax-markup-bold:                #e4e4f0;
+  --color-prettylights-syntax-markup-deleted-text:        #ff6b6b;
+  --color-prettylights-syntax-markup-deleted-bg:          rgba(255,107,107,0.12);
+  --color-prettylights-syntax-markup-inserted-text:       #3dff9a;
+  --color-prettylights-syntax-markup-inserted-bg:         rgba(61,255,154,0.12);
+  --color-prettylights-syntax-markup-changed-text:        #ffd166;
+  --color-prettylights-syntax-markup-changed-bg:          rgba(255,209,102,0.12);
+  --color-prettylights-syntax-markup-ignored-text:        #a0a0c0;
+  --color-prettylights-syntax-markup-ignored-bg:          #111120;
+  --color-prettylights-syntax-meta-diff-range:            #c084fc;
+  --color-prettylights-syntax-brackethighlighter-angle:   #5a5a80;
+  --color-prettylights-syntax-sublimelinter-gutter-mark:  #5a5a80;
+  --color-prettylights-syntax-constant-other-reference-link: #3dff9a;
+
+  /* ── Canvas / backgrounds ───────────────────────────────── */
+  --color-canvas-default:   #09090f;
+  --color-canvas-overlay:   #111120;
+  --color-canvas-inset:     #0d1117;
+  --color-canvas-subtle:    #0d0d18;
+  --color-canvas-backdrop:  rgba(0,0,0,0.8);
+
+  /* ── Borders ────────────────────────────────────────────── */
+  --color-border-default:  #1a1a2e;
+  --color-border-muted:    #1a1a2e;
+  --color-border-subtle:   rgba(26,26,46,0.7);
+
+  /* ── Text ───────────────────────────────────────────────── */
+  --color-fg-default:       #e4e4f0;
+  --color-fg-muted:         #a0a0c0;
+  --color-fg-subtle:        #5a5a80;
+  --color-fg-on-emphasis:   #09090f;
+
+  /* ── Accent — neon cyan ─────────────────────────────────── */
+  --color-accent-fg:        #00d4ff;
+  --color-accent-emphasis:  #00d4ff;
+  --color-accent-muted:     rgba(0,212,255,0.15);
+  --color-accent-subtle:    rgba(0,212,255,0.08);
+
+  /* ── Success — neon green ───────────────────────────────── */
+  --color-success-fg:       #3dff9a;
+  --color-success-emphasis: #3dff9a;
+  --color-success-muted:    rgba(61,255,154,0.12);
+  --color-success-subtle:   rgba(61,255,154,0.06);
+
+  /* ── Attention / Warning ────────────────────────────────── */
+  --color-attention-fg:       #ffd166;
+  --color-attention-emphasis: #ffd166;
+  --color-attention-muted:    rgba(255,209,102,0.12);
+  --color-attention-subtle:   rgba(255,209,102,0.06);
+
+  /* ── Danger ─────────────────────────────────────────────── */
+  --color-danger-fg:        #ff6b6b;
+  --color-danger-emphasis:  #ff6b6b;
+  --color-danger-muted:     rgba(255,107,107,0.12);
+  --color-danger-subtle:    rgba(255,107,107,0.06);
+
+  /* ── Neutral ────────────────────────────────────────────── */
+  --color-neutral-emphasis-plus: #a0a0c0;
+  --color-neutral-emphasis:      #5a5a80;
+  --color-neutral-muted:         rgba(26,26,46,0.7);
+  --color-neutral-subtle:        rgba(26,26,46,0.3);
+
+  /* ── Buttons (default) ──────────────────────────────────── */
+  --color-btn-bg:              #111120;
+  --color-btn-border:          rgba(37,37,64,0.9);
+  --color-btn-hover-bg:        #14142a;
+  --color-btn-hover-border:    rgba(51,51,96,0.9);
+  --color-btn-active-bg:       #0d0d18;
+  --color-btn-active-border:   rgba(37,37,64,1);
+  --color-btn-selected-bg:     #0d0d18;
+  --color-btn-fg:              #e4e4f0;
+  --color-btn-shadow:          0 0 transparent;
+  --color-btn-inset-shadow:    0 0 transparent;
+  --color-btn-focus-ring:      #00d4ff;
+  --color-btn-counter-bg:      #1a1a2e;
+
+  /* ── Primary button — neon cyan outline ─────────────────── */
+  --color-btn-primary-bg:              rgba(0,212,255,0.12);
+  --color-btn-primary-border:          rgba(0,212,255,0.45);
+  --color-btn-primary-fg:              #00d4ff;
+  --color-btn-primary-hover-bg:        rgba(0,212,255,0.22);
+  --color-btn-primary-hover-border:    rgba(0,212,255,0.65);
+  --color-btn-primary-selected-bg:     rgba(0,212,255,0.08);
+  --color-btn-primary-shadow:          0 0 transparent;
+  --color-btn-primary-inset-shadow:    0 0 transparent;
+  --color-btn-primary-focus-ring:      #00d4ff;
+  --color-btn-primary-icon:            #00d4ff;
+  --color-btn-primary-disabled-text:   rgba(0,212,255,0.4);
+  --color-btn-primary-disabled-bg:     rgba(0,212,255,0.05);
+  --color-btn-primary-disabled-border: rgba(0,212,255,0.2);
+
+  /* ── Input ──────────────────────────────────────────────── */
+  --color-input-bg:               #0d0d18;
+  --color-input-border:           #252540;
+  --color-input-disabled-bg:      rgba(13,13,24,0.6);
+  --color-input-disabled-border:  #1a1a2e;
+  --color-input-focus-border:     #00d4ff;
+
+  /* ── Shadows ────────────────────────────────────────────── */
+  --color-shadow-small:        0 1px 0 rgba(0,0,0,0.4);
+  --color-shadow-medium:       0 3px 6px rgba(0,0,0,0.6);
+  --color-shadow-large:        0 8px 24px rgba(0,0,0,0.7);
+  --color-shadow-extra-large:  0 12px 28px rgba(0,0,0,0.8);
+
+  /* ── Misc ───────────────────────────────────────────────── */
+  --color-timeline-badge-bg:  #111120;
+  --color-header-bg:          #09090f;
+  --color-header-divider:     #1a1a2e;
+  --color-header-text:        #a0a0c0;
+  --color-header-logo:        #00d4ff;
+  --color-markdown-blockquote-border: rgba(0,212,255,0.4);
+  --color-tooltip-text:       #e4e4f0;
+  --color-tooltip-bg:         #111120;
+
+  color-scheme: dark;
+  scrollbar-color: #252540 #09090f;
+}
+
+/* ── Body / root ──────────────────────────────────────────── */
+body {
+  background: #09090f;
+  color: #e4e4f0;
+  font-family: "JetBrains Mono", "Fira Code", "Cascadia Code", Consolas,
+               ui-monospace, monospace;
+  font-size: 0.875rem;
+}
+
+/* ── Scrollbar (Chromium) ─────────────────────────────────── */
+::-webkit-scrollbar       { width: 6px; height: 6px; }
+::-webkit-scrollbar-track { background: #09090f; }
+::-webkit-scrollbar-thumb { background: #252540; border-radius: 3px; }
+::-webkit-scrollbar-thumb:hover { background: #333360; }
+
+/* ── Links ────────────────────────────────────────────────── */
+a, a:visited { color: #00d4ff; }
+a:hover      { color: #66e3ff; }
+
+/* ── Reactions row ────────────────────────────────────────── */
+.gsc-reactions-count { color: #a0a0c0; }
+
+/* ── Comment box (write area) ─────────────────────────────── */
+.gsc-comment-box {
+  border-color: #252540 !important;
+  background:   #0d0d18 !important;
+  border-radius: 6px !important;
+}
+.gsc-comment-box-header {
+  border-bottom-color: #252540 !important;
+  background: rgba(255,255,255,0.02) !important;
+}
+.gsc-comment-box-tabs .gsc-comment-box-tab-active {
+  border-bottom: 2px solid #00d4ff !important;
+  color: #00d4ff !important;
+}
+.gsc-comment-box-tabs button {
+  color: #a0a0c0 !important;
+}
+.gsc-comment-box-textarea,
+.gsc-reply-box-textarea {
+  background:   #0d0d18 !important;
+  color:        #e4e4f0 !important;
+  border-color: #252540 !important;
+  font-family:  "JetBrains Mono", "Fira Code", monospace !important;
+  border-radius: 4px !important;
+  caret-color: #00d4ff;
+}
+.gsc-comment-box-textarea:focus,
+.gsc-reply-box-textarea:focus {
+  border-color: rgba(0,212,255,0.6) !important;
+  box-shadow:   0 0 0 3px rgba(0,212,255,0.1) !important;
+  outline: none !important;
+}
+.gsc-comment-box-md-toolbar {
+  border-top-color: #252540 !important;
+  background:       rgba(255,255,255,0.02) !important;
+}
+
+/* ── Individual comments ──────────────────────────────────── */
+.gsc-comment {
+  border-color: #1a1a2e !important;
+}
+.gsc-comment .gsc-comment-header {
+  background: rgba(255,255,255,0.02) !important;
+  border-bottom-color: #1a1a2e !important;
+}
+.gsc-comment .gsc-comment-author > a {
+  color: #00d4ff !important;
+  font-weight: 600;
+}
+/* avatar glow */
+.gsc-comment-author-avatar img,
+.gsc-comment-author-avatar svg {
+  border: 1px solid rgba(0,212,255,0.3) !important;
+  border-radius: 50% !important;
+  box-shadow: 0 0 8px rgba(0,212,255,0.18) !important;
+}
+
+/* ── Reply area ───────────────────────────────────────────── */
+.gsc-reply-box {
+  border-top-color: #1a1a2e !important;
+  background:       rgba(255,255,255,0.01) !important;
+}
+
+/* ── Pagination / load-more ───────────────────────────────── */
+.gsc-pagination button {
+  font-family: "JetBrains Mono", monospace !important;
+  background:    rgba(0,212,255,0.06) !important;
+  border-color:  rgba(0,212,255,0.3) !important;
+  color:         #00d4ff !important;
+  border-radius: 4px !important;
+}
+.gsc-pagination button:hover {
+  background:   rgba(0,212,255,0.15) !important;
+  border-color: rgba(0,212,255,0.55) !important;
+}
+
+/* ── Reaction emoji buttons ───────────────────────────────── */
+.gsc-emoji-button:hover,
+.gsc-emoji-button[aria-pressed="true"] {
+  border-color: rgba(0,212,255,0.4) !important;
+  background:   rgba(0,212,255,0.1) !important;
+}
+
+/* ── Sign-in button ───────────────────────────────────────── */
+.gsc-login > a,
+.gsc-login button {
+  font-family:  "JetBrains Mono", monospace !important;
+  background:   rgba(0,212,255,0.1) !important;
+  border-color: rgba(0,212,255,0.4) !important;
+  color:        #00d4ff !important;
+}
+.gsc-login > a:hover,
+.gsc-login button:hover {
+  background:   rgba(0,212,255,0.2) !important;
+  border-color: rgba(0,212,255,0.6) !important;
+}
+
+/* ── Blockquotes in comments ──────────────────────────────── */
+blockquote {
+  border-left: 3px solid rgba(0,212,255,0.4) !important;
+  color: #a0a0c0 !important;
+  background: rgba(0,212,255,0.04) !important;
+  padding: 0.5rem 1rem !important;
+  margin: 0.5rem 0 !important;
+}
+
+/* ── Code spans and blocks in comments ───────────────────── */
+code {
+  background:   #0d1117 !important;
+  color:        #3dff9a !important;
+  border:       1px solid #1a1a2e !important;
+  border-radius: 3px !important;
+  padding:      0.1em 0.35em !important;
+  font-family:  "JetBrains Mono", "Fira Code", monospace !important;
+}
+pre {
+  background:   #0d1117 !important;
+  border:       1px solid #1a1a2e !important;
+  border-radius: 6px !important;
+  padding:      1rem !important;
+}
+pre code {
+  border: none !important;
+  padding: 0 !important;
+  background: transparent !important;
+  color: #e4e4f0 !important;
+}
+
+/* ── Timestamps ───────────────────────────────────────────── */
+relative-time,
+time,
+.gsc-comment-header time {
+  color: #5a5a80 !important;
+  font-size: 0.75rem !important;
+}
+
+/* ── "x comments" header ──────────────────────────────────── */
+.gsc-header {
+  color: #a0a0c0;
+}
+.gsc-header .gsc-left-header span {
+  color: #00d4ff;
+}
+
+/* ── Subtle scanline overlay on the body ─────────────────── */
+body::after {
+  content: '';
+  position: fixed;
+  inset: 0;
+  background: repeating-linear-gradient(
+    0deg,
+    transparent,
+    transparent 3px,
+    rgba(0, 212, 255, 0.012) 3px,
+    rgba(0, 212, 255, 0.012) 4px
+  );
+  pointer-events: none;
+  z-index: 9999;
+}
+

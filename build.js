@@ -354,32 +354,50 @@ function postTemplate(post, htmlContent, prevPost, nextPost) {
   const c = config.comments || {};
   const commentsHtml = (c.provider === 'giscus' && c.repoId && c.categoryId)
     ? `<section class="comments-section">
-        <div class="comments-header">
-          <span class="comments-title"><span class="comments-title-prompt">//</span> comments</span>
-          <span class="comments-note">via GitHub Discussions</span>
+        <div class="terminal-window comments-terminal">
+          <div class="terminal-titlebar">
+            <div class="terminal-dots">
+              <span class="dot dot-red"></span>
+              <span class="dot dot-yellow"></span>
+              <span class="dot dot-green"></span>
+            </div>
+            <span class="terminal-title">💬 comments — GitHub Discussions</span>
+            <div class="terminal-dots-spacer"></div>
+          </div>
+          <div class="terminal-body comments-terminal-body">
+            <p class="comments-cmd-line"><span class="t-prompt">❯</span> <span class="t-cmd">giscus --repo <span class="t-yellow">${escHtml(c.repo)}</span> --mapping <span class="t-yellow">${escHtml(c.mapping || 'pathname')}</span></span></p>
+            <div class="giscus-container">
+              <script src="https://giscus.app/client.js"
+                data-repo="${escHtml(c.repo)}"
+                data-repo-id="${escHtml(c.repoId)}"
+                data-category="${escHtml(c.category)}"
+                data-category-id="${escHtml(c.categoryId)}"
+                data-mapping="${escHtml(c.mapping || 'pathname')}"
+                data-strict="0"
+                data-reactions-enabled="1"
+                data-emit-metadata="0"
+                data-input-position="top"
+                data-theme="${config.baseUrl}/assets/css/giscus-terminal.css"
+                data-lang="en"
+                crossorigin="anonymous"
+                async>
+              </scr` + `ipt>
+            </div>
+          </div>
         </div>
-        <script src="https://giscus.app/client.js"
-          data-repo="${escHtml(c.repo)}"
-          data-repo-id="${escHtml(c.repoId)}"
-          data-category="${escHtml(c.category)}"
-          data-category-id="${escHtml(c.categoryId)}"
-          data-mapping="${escHtml(c.mapping || 'pathname')}"
-          data-strict="0"
-          data-reactions-enabled="1"
-          data-emit-metadata="0"
-          data-input-position="bottom"
-          data-theme="${escHtml(c.theme || 'dark_dimmed')}"
-          data-lang="en"
-          crossorigin="anonymous"
-          async>
-        </scr` + `ipt>
       </section>`
     : (c.provider === 'giscus'
         ? `<section class="comments-section comments-unconfigured">
-            <div class="comments-header">
-              <span class="comments-title"><span class="comments-title-prompt">//</span> comments</span>
-            </div>
             <div class="terminal-window" style="max-width:100%">
+              <div class="terminal-titlebar">
+                <div class="terminal-dots">
+                  <span class="dot dot-red"></span>
+                  <span class="dot dot-yellow"></span>
+                  <span class="dot dot-green"></span>
+                </div>
+                <span class="terminal-title">💬 comments — setup required</span>
+                <div class="terminal-dots-spacer"></div>
+              </div>
               <div class="terminal-body" style="font-size:.8rem">
                 <p><span class="t-prompt">❯</span> <span class="t-cmd">giscus --status</span></p>
                 ${c.repoId

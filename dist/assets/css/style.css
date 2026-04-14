@@ -529,31 +529,38 @@ img, video { max-width: 100%; height: auto; display: block; }
 
 /* ─── Comments Section ────────────────────────────────────────────────────────── */
 .comments-section {
-  margin-top: 2rem;
+  margin-top: 2.5rem;
   padding-top: 2rem;
   border-top: 1px solid var(--border);
 }
-.comments-header {
-  display: flex;
-  align-items: baseline;
-  gap: 1rem;
-  margin-bottom: 1.5rem;
+
+/* Terminal window wrapping the entire comments section */
+.comments-terminal {
+  width: 100%;
+  box-shadow: var(--shadow-terminal), 0 0 0 1px rgba(0,212,255,.06);
 }
-.comments-title {
-  font-family: var(--font-mono);
-  font-size: .9rem;
-  font-weight: 400;
-  color: var(--text-secondary);
-  letter-spacing: .02em;
+.comments-terminal .terminal-titlebar .terminal-title {
+  letter-spacing: .03em;
 }
-.comments-title-prompt { color: var(--cyan); margin-right: .4rem; }
-.comments-note {
-  font-family: var(--font-mono);
-  font-size: .72rem;
-  color: var(--text-muted);
+
+/* The prompt line shown above the giscus iframe */
+.comments-cmd-line {
+  margin-bottom: .75rem;
+  line-height: 1.6;
 }
-/* let Giscus iframe inherit background */
-.giscus, .giscus-frame { width: 100%; }
+
+/* Giscus container — allow the iframe to size itself */
+.giscus-container {
+  margin-top: .5rem;
+}
+.giscus,
+.giscus-frame {
+  width: 100% !important;
+  border: none;
+  display: block;
+  /* smooth height transitions as giscus dynamically resizes */
+  transition: height .25s ease;
+}
 
 
 /* ─── Post navigation ─────────────────────────────────────────────────────────── */

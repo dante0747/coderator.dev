@@ -192,25 +192,37 @@ share your comments.</p>
 
       <!-- 💬 Comments + reactions (via Giscus — requires GitHub login, truly one-per-user) -->
       <section class="comments-section">
-        <div class="comments-header">
-          <span class="comments-title"><span class="comments-title-prompt">//</span> comments</span>
-          <span class="comments-note">via GitHub Discussions</span>
+        <div class="terminal-window comments-terminal">
+          <div class="terminal-titlebar">
+            <div class="terminal-dots">
+              <span class="dot dot-red"></span>
+              <span class="dot dot-yellow"></span>
+              <span class="dot dot-green"></span>
+            </div>
+            <span class="terminal-title">💬 comments — GitHub Discussions</span>
+            <div class="terminal-dots-spacer"></div>
+          </div>
+          <div class="terminal-body comments-terminal-body">
+            <p class="comments-cmd-line"><span class="t-prompt">❯</span> <span class="t-cmd">giscus --repo <span class="t-yellow">dante0747/coderator.dev</span> --mapping <span class="t-yellow">pathname</span></span></p>
+            <div class="giscus-container">
+              <script src="https://giscus.app/client.js"
+                data-repo="dante0747/coderator.dev"
+                data-repo-id="MDEwOlJlcG9zaXRvcnkyNTQ3MDU2OTM="
+                data-category="Announcements"
+                data-category-id="DIC_kwDODy6AHc4C61iP"
+                data-mapping="pathname"
+                data-strict="0"
+                data-reactions-enabled="1"
+                data-emit-metadata="0"
+                data-input-position="top"
+                data-theme="https://coderator.dev/assets/css/giscus-terminal.css"
+                data-lang="en"
+                crossorigin="anonymous"
+                async>
+              </script>
+            </div>
+          </div>
         </div>
-        <script src="https://giscus.app/client.js"
-          data-repo="dante0747/coderator.dev"
-          data-repo-id="MDEwOlJlcG9zaXRvcnkyNTQ3MDU2OTM="
-          data-category="Announcements"
-          data-category-id="DIC_kwDODy6AHc4C61iP"
-          data-mapping="pathname"
-          data-strict="0"
-          data-reactions-enabled="1"
-          data-emit-metadata="0"
-          data-input-position="bottom"
-          data-theme="preferred_color_scheme"
-          data-lang="en"
-          crossorigin="anonymous"
-          async>
-        </script>
       </section>
     </div>
     <nav class="post-navigation" aria-label="Post navigation">
