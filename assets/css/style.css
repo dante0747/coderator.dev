@@ -140,7 +140,7 @@ img, video { max-width: 100%; height: auto; display: block; }
 }
 
 /* Nav */
-.site-nav { display: flex; align-items: center; gap: .25rem; }
+.site-nav { display: flex; align-items: center; gap: .25rem; padding-top: 6px; }
 .nav-link {
   font-family: var(--font-mono);
   font-size: .75rem;
@@ -311,6 +311,7 @@ img, video { max-width: 100%; height: auto; display: block; }
 }
 .sep { color: var(--border-hover); }
 .post-card-title {
+  font-family: "Josefin Sans", var(--font-sans);
   font-size: 1rem; font-weight: 600; line-height: 1.4;
   color: var(--text);
   margin-bottom: .625rem;
@@ -380,6 +381,7 @@ img, video { max-width: 100%; height: auto; display: block; }
   margin-bottom: .875rem;
 }
 .post-title {
+  font-family: "Josefin Sans", var(--font-sans);
   font-size: clamp(1.75rem, 4vw, 2.5rem);
   font-weight: 700; line-height: 1.2;
   letter-spacing: -.02em;
