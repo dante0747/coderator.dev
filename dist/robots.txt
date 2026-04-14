@@ -1,0 +1,3 @@
+User-agent: *
+Allow: /
+Sitemap: https://coderator.dev/sitemap.xml

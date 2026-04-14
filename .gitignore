@@ -1,6 +1,10 @@
-_site/
-.sass-cache/
-.jekyll-cache/
-.jekyll-metadata
+# Node
+node_modules/
+
+# Editor
 .idea/
-Gemfile.lock
+.vscode/
+
+# OS
+.DS_Store
+Thumbs.db

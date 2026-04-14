@@ -1,0 +1,223 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Sluggish Spring Boot Tests Riddle | coderator.dev</title>
+  <meta name="description" content="How a nagging belief that integration tests are inherently slow turned out to be fixable — cutting our build time from 10 minutes to 4.">
+  <meta name="author" content="Majid Abarghooei">
+  <link rel="canonical" href="https://coderator.dev/posts/2020-10-13-sluggish-spring-boot-tests-riddle/">
+  <meta property="og:title" content="Sluggish Spring Boot Tests Riddle | coderator.dev">
+  <meta property="og:description" content="How a nagging belief that integration tests are inherently slow turned out to be fixable — cutting our build time from 10 minutes to 4.">
+  <meta property="og:image" content="https://coderator.dev/assets/images/1.jpg">
+  <meta property="og:type" content="article">
+  <meta property="og:url" content="https://coderator.dev/posts/2020-10-13-sluggish-spring-boot-tests-riddle/">
+  <meta property="og:site_name" content="coderator.dev">
+  <meta property="og:locale" content="en_US">
+  <meta property="article:published_time" content="2020-10-13">
+  <meta property="article:author" content="Majid Abarghooei">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="Sluggish Spring Boot Tests Riddle | coderator.dev">
+  <meta name="twitter:description" content="How a nagging belief that integration tests are inherently slow turned out to be fixable — cutting our build time from 10 minutes to 4.">
+  <meta name="twitter:image" content="https://coderator.dev/assets/images/1.jpg">
+  <link rel="icon" href="/favicon.ico">
+  <link rel="alternate" type="application/rss+xml" title="coderator.dev RSS Feed" href="/feed.xml">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:ital,wght@0,400;0,500;0,700;1,400&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="/assets/css/highlight.css">
+  <link rel="stylesheet" href="/assets/css/style.css">
+  <script type="application/ld+json">{"@context":"https://schema.org","@type":"BlogPosting","headline":"Sluggish Spring Boot Tests Riddle","description":"How a nagging belief that integration tests are inherently slow turned out to be fixable — cutting our build time from 10 minutes to 4.","image":"https://coderator.dev/assets/images/1.jpg","url":"https://coderator.dev/posts/2020-10-13-sluggish-spring-boot-tests-riddle/","datePublished":"2020-10-13","dateModified":"2020-10-13","author":{"@type":"Person","name":"Majid Abarghooei","url":"https://coderator.dev/about/","sameAs":["https://github.com/dante0747","https://www.linkedin.com/in/majidabarghooei"]},"publisher":{"@type":"Person","name":"Majid Abarghooei","url":"https://coderator.dev/about/","sameAs":["https://github.com/dante0747","https://www.linkedin.com/in/majidabarghooei"]},"mainEntityOfPage":{"@type":"WebPage","@id":"https://coderator.dev/posts/2020-10-13-sluggish-spring-boot-tests-riddle/"}}</script>
+</head>
+<body>
+  <div class="progress-bar" id="progress-bar"></div>
+
+  <header class="site-header">
+    <div class="container">
+      <div class="header-inner">
+        <a href="/" class="site-logo" aria-label="Home">
+          <span class="prompt">~/</span><span class="logo-text">coderator.dev</span><span class="cursor">▋</span>
+        </a>
+        <nav class="site-nav" id="site-nav">
+          <a href="/" class="nav-link">home</a>
+          <a href="/about/" class="nav-link">about</a>
+          <a href="https://github.com/dante0747" class="nav-link" target="_blank" rel="noopener noreferrer">github</a>
+        </nav>
+        <button class="nav-toggle" id="nav-toggle" aria-label="Toggle navigation" aria-expanded="false">
+          <span></span><span></span><span></span>
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <main id="main">
+    
+  <article class="post-layout">
+    <div class="post-hero" style="background-image:url('/assets/images/1.jpg')"></div>
+    <div class="post-container">
+      <header class="post-header">
+        <div class="post-meta">
+          <time datetime="2020-10-13">October 13, 2020</time>
+          <span class="sep">&middot;</span>
+          <span>6 min read</span>
+        </div>
+        <h1 class="post-title">Sluggish Spring Boot Tests Riddle</h1>
+        <div class="post-tags"><span class="tag">spring boot</span><span class="tag">java</span><span class="tag">tests</span><span class="tag">experience</span></div>
+      </header>
+      <div class="post-content">
+        <p>Most of us have faced beliefs that go unquestioned. Such ideas can vary from small daily matters such as grocery 
+shopping to something as serious as religious matters. In my case, it was a professional belief, specifically whether 
+or not integration tests are too slow.</p>
+<p>There was a belief in our squad (and our chapter as well) that integration tests were slow and this belief made us not 
+put this issue in our technical debts backlog and we all accepted it as a fact. It continued until the build time in 
+some microservices exceeded 10 minutes and teammates started complaining about them. The first reaction was avoiding 
+integration tests as much as possible and using unit tests instead. I know that it is not a wise decision against which 
+there are many arguments, but It was the decision that the team made. In this post, we will see how this issue got 
+resolved and the build time in our microservices decreased to half.</p>
+<p>Finally, over a weekend, I decided to follow this issue and find an answer to the question: <strong>Why are our integration 
+tests that slow?</strong> I started with writing down all the things I was skeptical about but my mind was just obsessed with 
+<strong>@SpringBootTest</strong>.</p>
+<h2>Following the first suspicion</h2>
+<p>Whenever our tests were running, I saw the Spring logo showing up several times. I thought that <strong>@SpringBootTest</strong> 
+loaded the full application context per each test class. After a ten-minute search, I realized that all my assumptions 
+were wrong. I found the point in the <a href="https://docs.spring.io/autorepo/docs/spring-framework/4.2.0.RC2/spring-framework-reference/html/integration-testing.html#testcontext-ctx-management-caching">Spring docs</a>:</p>
+<blockquote>
+<p>Once the TestContext framework loads an ApplicationContext (or WebApplicationContext) for a test, that context will 
+be cached and reused for all subsequent tests that declare the same unique context configuration within the same test 
+suite.</p>
+</blockquote>
+<p>So why did it still load the context per each test class? Actually, it did not. I got this by counting the context 
+loads by a specific piece of text in the log (which is repeating every time the Spring loads the application context). 
+Something like this:</p>
+<pre><code class="hljs language-commandline">mvn clean install &gt; build-log.txt
+
+grep &quot;The following profiles are active: test&quot; log.txt| wc -l
+</code></pre><p>The result was 16 while we had 46 integration test classes in the codebase. It means that it did not load the context 
+per each test class but why only 16 times?</p>
+<h2>Digging into the test classes</h2>
+<p>After getting this weird result from counting the context loads, I checked all of the test classes one by one to find a 
+clue. I realized that all of the integration test classes were annotated by <strong>@TestPropertySource</strong> to load one or more 
+specific property files. I also had another strange finding in this investigation: <strong>MockBean</strong> and <strong>SpyBean</strong> 
+annotations in integration tests. Not only I had philosophical issues with using these annotations in integration tests 
+but was it screaming that: &quot;<strong>Hey dude, there&#39;s a code smell here</strong>&quot;.</p>
+<p>I started the second round of searching and the same as the previous one, I managed to find tonnes of useful articles 
+and blog posts related to the context and some clues after about only ten minutes. I found 
+<a href="https://www.baeldung.com/spring-tests">this helpful blog post</a> by José Carlos Valero Sánchez about optimizing 
+Spring boot integration tests and 
+<a href="https://rieckpil.de/improve-build-times-with-context-caching-from-spring-test/">this one</a> that its author has had the 
+same journey as mine.</p>
+<p>By reading these articles and the same ones, I realized that there are some pitfalls in integration tests that prevent 
+the Spring from reusing the loaded application context in integration tests. Here are the most important ones:</p>
+<ul>
+<li>Using <strong>@MockBean</strong> and <strong>@SpyBean</strong></li>
+<li>Using <strong>@DirtiesContext</strong></li>
+<li>Careless use of profiles in integration tests</li>
+<li>Careless use of <strong>@TestPropertySource</strong></li>
+</ul>
+<p>I will review all of these items in a separate blog post in detail. Now, let&#39;s see how I boosted up our integration 
+tests by two minor actions.</p>
+<h2>Optimizing the integration tests</h2>
+<p>As I previously mentioned, there were two pitfalls in our integration test classes. The first one was annotating all of 
+the integration tests with <strong>@TestPropertySource</strong>. I took a quick look at them and found out there were different 
+combinations of property files used for each class. For example:</p>
+<pre><code class="hljs language-java"><span class="hljs-meta">@TestPropertySource({
+    &quot;classpath:x.properties&quot;,
+    &quot;classpath:y.properties&quot;
+})</span>
+<span class="hljs-keyword">public</span> <span class="hljs-keyword">class</span> <span class="hljs-title class_">TestOne</span>{
+    <span class="hljs-comment">//...</span>
+}
+
+<span class="hljs-meta">@TestPropertySource({
+    &quot;classpath:z.properties&quot;,
+    &quot;classpath:y.properties&quot;
+})</span>
+<span class="hljs-keyword">public</span> <span class="hljs-keyword">class</span> <span class="hljs-title class_">TestTwo</span>{
+    <span class="hljs-comment">//...</span>
+}
+
+<span class="hljs-meta">@TestPropertySource({
+    &quot;classpath:x.properties&quot;,
+    &quot;classpath:z.properties&quot;
+})</span>
+<span class="hljs-keyword">public</span> <span class="hljs-keyword">class</span> <span class="hljs-title class_">TestThree</span>{
+    <span class="hljs-comment">//...</span>
+}
+
+<span class="hljs-meta">@TestPropertySource({
+    &quot;classpath:x.properties&quot;,
+    &quot;classpath:z.properties&quot;
+})</span>
+<span class="hljs-keyword">public</span> <span class="hljs-keyword">class</span> <span class="hljs-title class_">TestFour</span>{
+    <span class="hljs-comment">//...</span>
+}
+</code></pre><p>In this situation, Spring loads the context per each unique combination of property files. For instance, in the 
+previous sample, it loads the context three times because x and z got repeated two times so the Spring can reuse the 
+context for both of them.</p>
+<p>So I decided to eliminate the <strong>TestPropertySource</strong> annotation from all of the integration test classes and aggregate 
+them in an abstract class that all of them extend. Here is the new style of the test classes:</p>
+<pre><code class="hljs language-java"><span class="hljs-meta">@TestPropertySource({
+    &quot;classpath:x.properties&quot;,
+    &quot;classpath:y.properties&quot;,
+    &quot;classpath:z.properties&quot;
+})</span>
+<span class="hljs-keyword">public</span> <span class="hljs-keyword">abstract</span> <span class="hljs-keyword">class</span> <span class="hljs-title class_">AbstractTes</span>{
+    <span class="hljs-comment">//...</span>
+}
+
+<span class="hljs-keyword">public</span> <span class="hljs-keyword">class</span> <span class="hljs-title class_">TestX</span> <span class="hljs-keyword">extends</span> <span class="hljs-title class_">AbstractTest</span>{
+    <span class="hljs-comment">//...</span>
+}
+</code></pre><p>Now, in this sample, it only loads the context once. I did something like this in the codebase and counted the context 
+loads again. The result was promising: the number of context loads decreased to 2 (from 16). Note that, for example, if 
+you have a property called <strong>database.url</strong> both in <strong>x.properties</strong> and <strong>z.properties</strong>, the second one overrides the 
+first one.</p>
+<p>I got through the remaining test classes. Guess what? All of them contained either <strong>@MockBean</strong> or <strong>@SpyBean</strong>. As I 
+previously mentioned, in a separate blog post I will address the usage of these fancy annotations and the issues they 
+may cause in integration tests.</p>
+<h2>Lesson Learned</h2>
+<p>The whole process took about 3 to 4 hours. Consequently, the build time decreased from 10 to 4 minutes on Jenkins. 
+It means that sometimes we could save plenty of time by investing some hours on following such issues that waste 
+considerable amounts of time in the long term.</p>
+<p>I will address the performance issues in integration tests in a separate blog post soon. I would be grateful if you 
+share your comments.</p>
+
+      </div>
+      <footer class="post-footer">
+        <div class="post-footer-tags">
+          <span class="footer-tags-label">tagged in:</span>
+          <span class="tag">spring boot</span><span class="tag">java</span><span class="tag">tests</span><span class="tag">experience</span>
+        </div>
+      </footer>
+    </div>
+    <nav class="post-navigation" aria-label="Post navigation">
+      <div class="container">
+        <span></span>
+        <a href="/posts/2020-12-25-how-to-make-your-reviewer-cry-using-optional/" class="post-nav-link next">
+        <span class="nav-arrow">→</span>
+        <span class="nav-label">Next</span>
+        <span class="nav-title">How to Make Your Reviewer Cry Using Java Optional</span>
+      </a>
+      </div>
+    </nav>
+  </article>
+  </main>
+
+  <footer class="site-footer">
+    <div class="container">
+      <div class="footer-inner">
+        <p class="footer-copy">
+          &copy; 2026 Majid Abarghooei.
+          Built with <a href="https://github.com/dante0747/coderator.dev" target="_blank" rel="noopener">a custom SSG</a>.
+        </p>
+        <div class="footer-social">
+          <a href="https://github.com/dante0747" target="_blank" rel="noopener" aria-label="GitHub"><svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 0C5.37 0 0 5.37 0 12c0 5.31 3.435 9.795 8.205 11.385.6.105.825-.255.825-.57 0-.285-.015-1.23-.015-2.235-3.015.555-3.795-.735-4.035-1.41-.135-.345-.72-1.41-1.23-1.695-.42-.225-1.02-.78-.015-.795.945-.015 1.62.87 1.845 1.23 1.08 1.815 2.805 1.305 3.495.99.105-.78.42-1.305.765-1.605-2.67-.3-5.46-1.335-5.46-5.925 0-1.305.465-2.385 1.23-3.225-.12-.3-.54-1.53.12-3.18 0 0 1.005-.315 3.3 1.23.96-.27 1.98-.405 3-.405s2.04.135 3 .405c2.295-1.56 3.3-1.23 3.3-1.23.66 1.65.24 2.88.12 3.18.765.84 1.23 1.905 1.23 3.225 0 4.605-2.805 5.625-5.475 5.925.435.375.81 1.095.81 2.22 0 1.605-.015 2.895-.015 3.3 0 .315.225.69.825.57A12.02 12.02 0 0 0 24 12c0-6.63-5.37-12-12-12z"/></svg></a>
+          <a href="https://linkedin.com/in/majidabarghooei" target="_blank" rel="noopener" aria-label="LinkedIn"><svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433a2.062 2.062 0 0 1-2.063-2.065 2.064 2.064 0 1 1 2.063 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z"/></svg></a>
+        </div>
+      </div>
+    </div>
+  </footer>
+
+  <script src="/assets/js/main.js"></script>
+</body>
+</html>

@@ -1,0 +1,264 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>How to Make Your Reviewer Cry Using Java Optional | coderator.dev</title>
+  <meta name="description" content="Four common Java Optional pitfalls I keep seeing in code reviews — from old-fashioned isPresent/get patterns to the philosophical crime of orElse(null).">
+  <meta name="author" content="Majid Abarghooei">
+  <link rel="canonical" href="https://coderator.dev/posts/2020-12-25-how-to-make-your-reviewer-cry-using-optional/">
+  <meta property="og:title" content="How to Make Your Reviewer Cry Using Java Optional | coderator.dev">
+  <meta property="og:description" content="Four common Java Optional pitfalls I keep seeing in code reviews — from old-fashioned isPresent/get patterns to the philosophical crime of orElse(null).">
+  <meta property="og:image" content="https://coderator.dev/assets/images/2-1.jpg">
+  <meta property="og:type" content="article">
+  <meta property="og:url" content="https://coderator.dev/posts/2020-12-25-how-to-make-your-reviewer-cry-using-optional/">
+  <meta property="og:site_name" content="coderator.dev">
+  <meta property="og:locale" content="en_US">
+  <meta property="article:published_time" content="2020-12-25">
+  <meta property="article:author" content="Majid Abarghooei">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="How to Make Your Reviewer Cry Using Java Optional | coderator.dev">
+  <meta name="twitter:description" content="Four common Java Optional pitfalls I keep seeing in code reviews — from old-fashioned isPresent/get patterns to the philosophical crime of orElse(null).">
+  <meta name="twitter:image" content="https://coderator.dev/assets/images/2-1.jpg">
+  <link rel="icon" href="/favicon.ico">
+  <link rel="alternate" type="application/rss+xml" title="coderator.dev RSS Feed" href="/feed.xml">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:ital,wght@0,400;0,500;0,700;1,400&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="/assets/css/highlight.css">
+  <link rel="stylesheet" href="/assets/css/style.css">
+  <script type="application/ld+json">{"@context":"https://schema.org","@type":"BlogPosting","headline":"How to Make Your Reviewer Cry Using Java Optional","description":"Four common Java Optional pitfalls I keep seeing in code reviews — from old-fashioned isPresent/get patterns to the philosophical crime of orElse(null).","image":"https://coderator.dev/assets/images/2-1.jpg","url":"https://coderator.dev/posts/2020-12-25-how-to-make-your-reviewer-cry-using-optional/","datePublished":"2020-12-25","dateModified":"2020-12-25","author":{"@type":"Person","name":"Majid Abarghooei","url":"https://coderator.dev/about/","sameAs":["https://github.com/dante0747","https://www.linkedin.com/in/majidabarghooei"]},"publisher":{"@type":"Person","name":"Majid Abarghooei","url":"https://coderator.dev/about/","sameAs":["https://github.com/dante0747","https://www.linkedin.com/in/majidabarghooei"]},"mainEntityOfPage":{"@type":"WebPage","@id":"https://coderator.dev/posts/2020-12-25-how-to-make-your-reviewer-cry-using-optional/"}}</script>
+</head>
+<body>
+  <div class="progress-bar" id="progress-bar"></div>
+
+  <header class="site-header">
+    <div class="container">
+      <div class="header-inner">
+        <a href="/" class="site-logo" aria-label="Home">
+          <span class="prompt">~/</span><span class="logo-text">coderator.dev</span><span class="cursor">▋</span>
+        </a>
+        <nav class="site-nav" id="site-nav">
+          <a href="/" class="nav-link">home</a>
+          <a href="/about/" class="nav-link">about</a>
+          <a href="https://github.com/dante0747" class="nav-link" target="_blank" rel="noopener noreferrer">github</a>
+        </nav>
+        <button class="nav-toggle" id="nav-toggle" aria-label="Toggle navigation" aria-expanded="false">
+          <span></span><span></span><span></span>
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <main id="main">
+    
+  <article class="post-layout">
+    <div class="post-hero" style="background-image:url('/assets/images/2-1.jpg')"></div>
+    <div class="post-container">
+      <header class="post-header">
+        <div class="post-meta">
+          <time datetime="2020-12-25">December 25, 2020</time>
+          <span class="sep">&middot;</span>
+          <span>8 min read</span>
+        </div>
+        <h1 class="post-title">How to Make Your Reviewer Cry Using Java Optional</h1>
+        <div class="post-tags"><span class="tag">java</span></div>
+      </header>
+      <div class="post-content">
+        <p>I think code review is one of the best sources of inspiration. I see it as an opportunity to learn new things from 
+other software developers sending pull/merge requests. Moreover, sometimes you may need to study a specific subject 
+with more details regarding the under review code. Usually, this process leads to a more profound knowledge of that 
+domain. However, there&#39;s still another fact about code review: after a while, you face some common mistakes. Recently, 
+I reviewed a feature in which I saw an <strong>Optional</strong> pitfall. Honestly, I had seen that issue several times in 
+different merge requests sent by several developers (from beginners to experienced ones).</p>
+<p>I know that there are tonnes of articles regarding Java <strong>Optional</strong> some of which are quite useful like 
+<a href="https://dzone.com/articles/using-optional-correctly-is-not-optional">this one</a> (although I have arguments against some 
+of the cases mentioned in the article) by <a href="https://dzone.com/users/196910/anghelleonard.html">Anghel Leonard</a>, the 
+author of <a href="https://www.amazon.com/gp/product/B07Y9BPV4W/">Java Coding Problems</a>. I don&#39;t want to repeat all of the 
+contents you can simply find by googling. I intend to talk about some of the most common and less addressed pitfalls 
+regarding <strong>Optional</strong> usage.</p>
+<p><figure><img src="" alt="" loading="lazy"></figure></p>
+<h2>What is Optional?</h2>
+<p>Before diving into the main subject, let&#39;s review some definitions and see what <strong>Optional</strong> is. As a Java developer, 
+you should have encountered the infamous <strong>NullPointerException</strong> that occurs when you&#39;re going to access 
+a <strong>null</strong> reference. With a quick search, you can find thousands of memes and jokes about null references in Java (and 
+other languages as well). <strong>Optional</strong> came in to play in Java 8 to help programmers get rid of all of the problems caused 
+by <strong>null</strong> references. Have a look at 
+<a href="https://www.oracle.com/technical-resources/articles/java/java8-optional.html">this article</a>, from 
+<a href="https://www.oracle.com/technical-resources/">Oracle technical resources</a>, to read more about the motivation of 
+<strong>Optional</strong> existence in Java.</p>
+<p>Now we are going to have a look at Optional&#39;s 
+<a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/util/Optional.html">JavaDoc</a> and check the provided 
+definition.</p>
+<blockquote>
+<p>A container object which may or may not contain a non-null value.</p>
+</blockquote>
+<p>Following this introduction, as an API note, there is an answer to the first question that may come to mind: &quot;when 
+should we use <strong>Optional</strong>?&quot;</p>
+<blockquote>
+<p>Optional is primarily intended for use as a method return type where there is a clear need to represent &quot;no result,&quot; 
+and where using null is likely to cause errors. A variable whose type is Optional should never itself be null; it 
+should always point to an Optional instance.</p>
+</blockquote>
+<p>So we can extract the following points from the 
+<a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/util/Optional.html">JavaDoc</a> descriptions:</p>
+<ul>
+<li>Optional is a container object.</li>
+<li>It may not contain a <strong>non-null</strong> value.</li>
+<li>It is mainly used as a return type when using <strong>null</strong> is troublesome.</li>
+<li>The variable with the Optional type should not be <strong>null</strong>.</li>
+</ul>
+<p>Keeping in mind these subtle points, you can simply spot most of the <strong>Optional</strong> related code smells. Now, it&#39;s time 
+to go through the four most common <strong>Optional</strong> pitfalls.</p>
+<h2>Old Fashioned Exception Handling</h2>
+<p>One of the most common mistakes I usually face in code reviews is using an if/else block to handle the circumstances 
+that the <strong>Optional</strong> variable doesn&#39;t contain a non-null value (as previously mentioned in the <strong>Optional</strong> 
+definition). Check this out:</p>
+<pre><code class="hljs language-java">Optional&lt;User&gt; userOptional = userDao.findByCellNumber(cellNumber);
+
+<span class="hljs-keyword">if</span> (!userOptional.isPresent()) {
+    <span class="hljs-keyword">throw</span> <span class="hljs-keyword">new</span> <span class="hljs-title class_">UserNotFoundException</span>(<span class="hljs-string">&quot;...&quot;</span>);
+} <span class="hljs-keyword">else</span> {
+    <span class="hljs-type">User</span> <span class="hljs-variable">user</span> <span class="hljs-operator">=</span> userOptional.get();
+    <span class="hljs-comment">//...</span>
+}
+</code></pre><p>Suppose that you intend to find a user by a specific cell number from the database. Then you receive an <strong>Optional</strong> 
+variable from the corresponding DAO class. Now, you want to check if there&#39;s a user with the cell number you have 
+provided. What&#39;s wrong with the above code? Doesn&#39;t work? Honestly, it works like a charm. However, it&#39;s not elegant; 
+it&#39;s something like twisting wood screws with a wrench. Now, check the following code snippet:</p>
+<pre><code class="hljs language-java"><span class="hljs-type">User</span> <span class="hljs-variable">user</span> <span class="hljs-operator">=</span> userDao.findByCellNumber(cellNumber).orElseThrow(UserNotFoundException::<span class="hljs-keyword">new</span>);
+</code></pre><p>Using the <strong>orElseThrow</strong>, you can do the same thing more concisely and elegantly without any need to <strong>get</strong> method. 
+You can also use its 
+<a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/util/Optional.html#orElseThrow()">no-argument version</a> 
+of <strong>orElseThrow</strong> introduced in Java 10.</p>
+<h2>orElse and orElseGet Misuse</h2>
+<p>The second common pitfall may emerge while using <strong>orElse</strong> or <strong>orElseGet</strong>. It seems these methods do the same thing; 
+however, there is a significant difference not that fancy like the previous one. Let&#39;s have a look at their signatures 
+and corresponding Javadoc:</p>
+<pre><code class="hljs language-java"><span class="hljs-keyword">public</span> T <span class="hljs-title function_">orElse</span><span class="hljs-params">(T other)</span>
+<span class="hljs-comment">//If a value is present, returns the value, otherwise returns other.</span>
+<span class="hljs-comment">//Parameters:</span>
+<span class="hljs-comment">//other - the value to be returned, if no value is present. May be null.</span>
+<span class="hljs-comment">//Returns:</span>
+<span class="hljs-comment">//the value, if present, otherwise other</span>
+</code></pre><pre><code class="hljs language-java"><span class="hljs-keyword">public</span> T <span class="hljs-title function_">orElseGet</span><span class="hljs-params">(Supplier&lt;? extends T&gt; supplier)</span>
+<span class="hljs-comment">//If a value is present, returns the value, otherwise returns the result produced by the supplying function.</span>
+<span class="hljs-comment">//Parameters:</span>
+<span class="hljs-comment">//supplier - the supplying function that produces a value to be returned</span>
+<span class="hljs-comment">//Returns:</span>
+<span class="hljs-comment">//the value, if present, otherwise the result produced by the supplying function</span>
+<span class="hljs-comment">//Throws:</span>
+<span class="hljs-comment">//NullPointerException - if no value is present and the supplying function is null</span>
+</code></pre><p>Regarding the above signatures, the first difference is crystal clear: <strong>orElse</strong> accepts a generic object as an 
+argument; however, <strong>orElseGet</strong> accepts a supplier function that produces a value. So what? You are right; it may seem 
+negligible. However, it&#39;s not that easy. Let&#39;s check the following sample:</p>
+<pre><code class="hljs language-java">Optional&lt;Integer&gt; number = Optional.of(<span class="hljs-number">10</span>);
+System.out.println(<span class="hljs-string">&quot;The number is: &quot;</span> + number.orElseGet(() -&gt; alternativeNumber()));
+
+<span class="hljs-keyword">private</span> <span class="hljs-keyword">static</span> Integer <span class="hljs-title function_">alternativeNumber</span><span class="hljs-params">()</span> {
+    <span class="hljs-type">int</span> <span class="hljs-variable">number</span> <span class="hljs-operator">=</span> <span class="hljs-number">747</span>;
+    System.out.println(<span class="hljs-string">&quot;The alternative number is: &quot;</span> + number);
+    <span class="hljs-keyword">return</span> number;
+}
+</code></pre><p>What&#39;s the output of the above code snippet? As you see, the number is an <strong>Optional</strong> variable initiated with the 
+value of 10. So we don&#39;t expect <strong>orElseGet</strong> to do something. Here&#39;s the output:</p>
+<pre><code class="hljs language-text">The number is: 10
+</code></pre><p>That&#39;s super easy, right? Now check this one:</p>
+<pre><code class="hljs language-java">Optional&lt;Integer&gt; number = Optional.of(<span class="hljs-number">10</span>);
+System.out.println(<span class="hljs-string">&quot;The number is: &quot;</span> + number.orElse(alternativeNumber()));
+
+<span class="hljs-keyword">private</span> <span class="hljs-keyword">static</span> Integer <span class="hljs-title function_">alternativeNumber</span><span class="hljs-params">()</span> {
+    <span class="hljs-type">int</span> <span class="hljs-variable">number</span> <span class="hljs-operator">=</span> <span class="hljs-number">747</span>;
+    System.out.println(<span class="hljs-string">&quot;The alternative number is: &quot;</span> + number);
+    <span class="hljs-keyword">return</span> number;
+}
+</code></pre><p>Everything is the same as the previous example except the second line in which we have used <strong>orElse</strong> instead of 
+<strong>orElseGet</strong>. We don&#39;t expect the <strong>orElse</strong> to do something yet because our <strong>number</strong> has a value. Just stop here 
+and guess the output! Same as the previous one? No! The output is:</p>
+<pre><code class="hljs language-java">The alternative number is: <span class="hljs-number">747</span>
+The number is: <span class="hljs-number">10</span>
+</code></pre><p>The <strong>orElse</strong>&#39;s parameter always gets evaluated; even if the <strong>Optional</strong> variable contains a value. However, the 
+supplier method passed to the <strong>orElseGet</strong> only gets evaluated when the <strong>Optional</strong> variable is empty. That&#39;s why the 
+second output is different. Note that this could affect the performance drastically in cases you use <strong>orElse</strong> and 
+pass it a complex method.</p>
+<h2>Using orElse(null)</h2>
+<p>The other common mistake I usually encounter in code reviews is somehow philosophical; that&#39;s using <strong>orElse(null)</strong>. 
+What&#39;s wrong with it? To find the answer, let&#39;s review the motivation of Optional existence. As I previously mentioned, 
+<strong>Optional</strong> exists to help you not to face the problems caused by <strong>null</strong> references such as 
+<strong>NullPointerException</strong>. We also talked about the <strong>orElse</strong> method in the previous section. Now, 
+put these two parts together. Does it make any sense to ask our <strong>Optional</strong> object to return <strong>null</strong> if it&#39;s empty 
+and doesn&#39;t contain a value? </p>
+<p>The <strong>orElse</strong> method is a proper way to return an alternative value in the cases the <strong>Optional</strong> object is empty. 
+Returning <strong>null</strong>, questions the usage of <strong>Optional</strong>. You may prefer to use a <strong>null</strong> reference instead of 
+<strong>Optional</strong>; it&#39;s ok, although I never recommend it. However, mixing these two ideas is somehow misleading. At the 
+first glance, the code seems <strong>null</strong> safe; however, you may face <strong>null</strong> reference issues, sooner or later.</p>
+<h2>Returning null in a method with Optional return type</h2>
+<p>Before describing the last and weirdest case, let&#39;s see how it happens. Let&#39;s get back to the previous example. 
+Suppose that the <strong>findByCellNumber</strong> is something like this:</p>
+<pre><code class="hljs language-java"><span class="hljs-keyword">public</span> Optional&lt;User&gt; <span class="hljs-title function_">findByCellNumber</span><span class="hljs-params">(String cellNumber)</span> {
+    <span class="hljs-comment">//some code here</span>
+    <span class="hljs-keyword">if</span> (someCondition) {
+        <span class="hljs-keyword">return</span> <span class="hljs-literal">null</span>;
+    }
+    <span class="hljs-comment">//some code here</span>
+}
+</code></pre><p>As you see, this method returns <strong>null</strong> in a specific condition. Suppose that the database is down and the author 
+handles the exception and returns <strong>null</strong> in this situation (<strong>BAD PRACTICE</strong>, don&#39;t try this at home). So, there are 
+some circumstances where you try to get the <strong>Optional</strong> value but you encounter a <strong>NullPointerException</strong>. Look at 
+this:</p>
+<pre><code class="hljs language-java"><span class="hljs-type">User</span> <span class="hljs-variable">user</span> <span class="hljs-operator">=</span> userDao.findByCellNumber(cellNumber).orElseThrow(UserNotFoundException::<span class="hljs-keyword">new</span>);
+</code></pre><p>We expect the method to return an <strong>Optional</strong> then we use <strong>orElseThrow</strong>; however, it returns <strong>null</strong>. So, our try 
+leads to an exception. How to avoid this issue? This is the point: as previously mentioned, an <strong>Optional</strong> MUST not be 
+<strong>null</strong>.</p>
+<h2>Quick Recap</h2>
+<ul>
+<li>Each explicit call to <strong>get</strong> method of an <strong>Optional</strong> variable could be a code smell.</li>
+<li><strong>orElse</strong> and <strong>orElseGet</strong> are not equivalent.</li>
+<li><strong>Optional</strong> was added to Java to help developers avoid <strong>null</strong> references. So each <strong>return null</strong> or 
+<strong>orElse(null)</strong> presence in your code using <strong>Optional</strong> variables is a code smell.</li>
+</ul>
+<p>Keeping in mind these points, you can prevent most of the common pitfalls while using <strong>Optional</strong>.</p>
+
+      </div>
+      <footer class="post-footer">
+        <div class="post-footer-tags">
+          <span class="footer-tags-label">tagged in:</span>
+          <span class="tag">java</span>
+        </div>
+      </footer>
+    </div>
+    <nav class="post-navigation" aria-label="Post navigation">
+      <div class="container">
+        <a href="/posts/2020-10-13-sluggish-spring-boot-tests-riddle/" class="post-nav-link prev">
+        <span class="nav-arrow">←</span>
+        <span class="nav-label">Previous</span>
+        <span class="nav-title">Sluggish Spring Boot Tests Riddle</span>
+      </a>
+        <a href="/posts/2022-09-20-a-seamingly-simple-question-what-are-design-patterns/" class="post-nav-link next">
+        <span class="nav-arrow">→</span>
+        <span class="nav-label">Next</span>
+        <span class="nav-title">A seemingly simple question: What are design patterns?</span>
+      </a>
+      </div>
+    </nav>
+  </article>
+  </main>
+
+  <footer class="site-footer">
+    <div class="container">
+      <div class="footer-inner">
+        <p class="footer-copy">
+          &copy; 2026 Majid Abarghooei.
+          Built with <a href="https://github.com/dante0747/coderator.dev" target="_blank" rel="noopener">a custom SSG</a>.
+        </p>
+        <div class="footer-social">
+          <a href="https://github.com/dante0747" target="_blank" rel="noopener" aria-label="GitHub"><svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 0C5.37 0 0 5.37 0 12c0 5.31 3.435 9.795 8.205 11.385.6.105.825-.255.825-.57 0-.285-.015-1.23-.015-2.235-3.015.555-3.795-.735-4.035-1.41-.135-.345-.72-1.41-1.23-1.695-.42-.225-1.02-.78-.015-.795.945-.015 1.62.87 1.845 1.23 1.08 1.815 2.805 1.305 3.495.99.105-.78.42-1.305.765-1.605-2.67-.3-5.46-1.335-5.46-5.925 0-1.305.465-2.385 1.23-3.225-.12-.3-.54-1.53.12-3.18 0 0 1.005-.315 3.3 1.23.96-.27 1.98-.405 3-.405s2.04.135 3 .405c2.295-1.56 3.3-1.23 3.3-1.23.66 1.65.24 2.88.12 3.18.765.84 1.23 1.905 1.23 3.225 0 4.605-2.805 5.625-5.475 5.925.435.375.81 1.095.81 2.22 0 1.605-.015 2.895-.015 3.3 0 .315.225.69.825.57A12.02 12.02 0 0 0 24 12c0-6.63-5.37-12-12-12z"/></svg></a>
+          <a href="https://linkedin.com/in/majidabarghooei" target="_blank" rel="noopener" aria-label="LinkedIn"><svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433a2.062 2.062 0 0 1-2.063-2.065 2.064 2.064 0 1 1 2.063 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z"/></svg></a>
+        </div>
+      </div>
+    </div>
+  </footer>
+
+  <script src="/assets/js/main.js"></script>
+</body>
+</html>

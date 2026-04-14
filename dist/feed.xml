@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title><![CDATA[coderator.dev]]></title>
+    <link>https://coderator.dev</link>
+    <description><![CDATA[Writing about Java, Spring Boot, design patterns, and software craftsmanship.]]></description>
+    <language>en-us</language>
+    <managingEditor>Majid Abarghooei</managingEditor>
+    <lastBuildDate>Tue, 14 Apr 2026 13:36:47 GMT</lastBuildDate>
+    <atom:link href="https://coderator.dev/feed.xml" rel="self" type="application/rss+xml"/>
+    <item>
+      <title><![CDATA[A seemingly simple question: What are design patterns?]]></title>
+      <link>https://coderator.dev/posts/2022-09-20-a-seamingly-simple-question-what-are-design-patterns/</link>
+      <guid isPermaLink="true">https://coderator.dev/posts/2022-09-20-a-seamingly-simple-question-what-are-design-patterns/</guid>
+      <pubDate>Tue, 20 Sep 2022 00:00:00 GMT</pubDate>
+      <description><![CDATA[Before debating whether design patterns are dead or alive, we should first agree on what they actually are. Spoiler: the answer is broader than the GoF book.]]></description>
+      <category><![CDATA[design patterns]]></category>
+    </item>
+    <item>
+      <title><![CDATA[How to Make Your Reviewer Cry Using Java Optional]]></title>
+      <link>https://coderator.dev/posts/2020-12-25-how-to-make-your-reviewer-cry-using-optional/</link>
+      <guid isPermaLink="true">https://coderator.dev/posts/2020-12-25-how-to-make-your-reviewer-cry-using-optional/</guid>
+      <pubDate>Fri, 25 Dec 2020 00:00:00 GMT</pubDate>
+      <description><![CDATA[Four common Java Optional pitfalls I keep seeing in code reviews — from old-fashioned isPresent/get patterns to the philosophical crime of orElse(null).]]></description>
+      <category><![CDATA[java]]></category>
+    </item>
+    <item>
+      <title><![CDATA[Sluggish Spring Boot Tests Riddle]]></title>
+      <link>https://coderator.dev/posts/2020-10-13-sluggish-spring-boot-tests-riddle/</link>
+      <guid isPermaLink="true">https://coderator.dev/posts/2020-10-13-sluggish-spring-boot-tests-riddle/</guid>
+      <pubDate>Tue, 13 Oct 2020 00:00:00 GMT</pubDate>
+      <description><![CDATA[How a nagging belief that integration tests are inherently slow turned out to be fixable — cutting our build time from 10 minutes to 4.]]></description>
+      <category><![CDATA[spring boot]]></category>
+      <category><![CDATA[java]]></category>
+      <category><![CDATA[tests]]></category>
+      <category><![CDATA[experience]]></category>
+    </item>
+  </channel>
+</rss>
