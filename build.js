@@ -14,7 +14,7 @@ const config = require('./config.js');
 
 /** Fix relative image src to absolute /assets/... paths */
 const renderer = {
-  image({ href, title, text }) {
+  image(href, title, text) {
     let src = href || '';
     if (src && !src.startsWith('http') && !src.startsWith('/')) {
       src = src.replace(/^\.\.\//, '/');
