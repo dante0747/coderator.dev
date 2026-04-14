@@ -52,6 +52,9 @@
     
   <section class="hero">
     <div class="container">
+      <div class="pixel-title-wrap">
+        <canvas id="pixel-title" aria-label="coderator.dev"></canvas>
+      </div>
       <div class="terminal-window">
         <div class="terminal-titlebar">
           <div class="terminal-dots">
@@ -62,11 +65,13 @@
           <span class="terminal-title">coderator.dev — zsh</span>
           <div class="terminal-dots-spacer"></div>
         </div>
-        <div class="terminal-body">
+        <div class="terminal-body hero-terminal-body">
           <p><span class="t-prompt">❯</span> <span class="t-cmd">whoami</span></p>
           <p class="t-out">Majid Abarghooei <span class="t-dim">// software engineer &amp; tech writer</span></p>
-          <p><span class="t-prompt">❯</span> <span class="t-cmd">cat about.txt</span></p>
-          <p class="t-out">Writing about Java, Spring Boot, design patterns, and software craftsmanship.</p>
+          <p><span class="t-prompt">❯</span> <span class="t-cmd">git log --oneline -3</span></p>
+          <p class="t-out"><span class="t-yellow">34f6b8d</span> <span class="t-green">feat:</span> A seemingly simple question: What are design…</p>
+          <p class="t-out"><span class="t-yellow">f9fee3b</span> <span class="t-green">feat:</span> How to Make Your Reviewer Cry Using Java Opt…</p>
+          <p class="t-out"><span class="t-yellow">1f8725c</span> <span class="t-green">feat:</span> Sluggish Spring Boot Tests Riddle</p>
           <p><span class="t-prompt">❯</span> <span class="t-cmd">ls posts/</span> <span class="cursor-blink">▋</span></p>
         </div>
       </div>
@@ -88,6 +93,8 @@
         </div>
         <div class="post-card-content">
           <div class="post-card-meta">
+            <span class="commit-hash">34f6b8d</span>
+            <span class="sep">&middot;</span>
             <time datetime="2022-09-20">September 20, 2022</time>
             <span class="sep">&middot;</span>
             <span>8 min read</span>
@@ -105,6 +112,8 @@
         </div>
         <div class="post-card-content">
           <div class="post-card-meta">
+            <span class="commit-hash">f9fee3b</span>
+            <span class="sep">&middot;</span>
             <time datetime="2020-12-25">December 25, 2020</time>
             <span class="sep">&middot;</span>
             <span>8 min read</span>
@@ -122,6 +131,8 @@
         </div>
         <div class="post-card-content">
           <div class="post-card-meta">
+            <span class="commit-hash">1f8725c</span>
+            <span class="sep">&middot;</span>
             <time datetime="2020-10-13">October 13, 2020</time>
             <span class="sep">&middot;</span>
             <span>6 min read</span>

@@ -76,6 +76,12 @@ function tagPills(tags) {
   return arr.map(t => `<span class="tag">${escHtml(t)}</span>`).join('');
 }
 
+function fakeHash(str) {
+  let h = 5381;
+  for (let i = 0; i < str.length; i++) h = Math.imul(h, 33) ^ str.charCodeAt(i);
+  return (h >>> 0).toString(16).padStart(8, '0').slice(0, 7);
+}
+
 // ─── Post reading ──────────────────────────────────────────────────────────────
 
 function readPosts() {
@@ -261,6 +267,8 @@ function indexTemplate(posts) {
         </div>
         <div class="post-card-content">
           <div class="post-card-meta">
+            <span class="commit-hash">${fakeHash(post.slug)}</span>
+            <span class="sep">&middot;</span>
             <time datetime="${post.date}">${formatDate(post.date)}</time>
             <span class="sep">&middot;</span>
             <span>${post.readingTime}</span>
@@ -273,9 +281,18 @@ function indexTemplate(posts) {
     </article>`;
   }).join('');
 
+  const recentPosts = posts.slice(0, 3);
+  const gitLogLines = recentPosts.map(p => {
+    const shortTitle = p.title.length > 44 ? p.title.slice(0, 44) + '…' : p.title;
+    return `          <p class="t-out"><span class="t-yellow">${fakeHash(p.slug)}</span> <span class="t-green">feat:</span> ${escHtml(shortTitle)}</p>`;
+  }).join('\n');
+
   return `
   <section class="hero">
     <div class="container">
+      <div class="pixel-title-wrap">
+        <canvas id="pixel-title" aria-label="coderator.dev"></canvas>
+      </div>
       <div class="terminal-window">
         <div class="terminal-titlebar">
           <div class="terminal-dots">
@@ -286,11 +303,11 @@ function indexTemplate(posts) {
           <span class="terminal-title">coderator.dev — zsh</span>
           <div class="terminal-dots-spacer"></div>
         </div>
-        <div class="terminal-body">
+        <div class="terminal-body hero-terminal-body">
           <p><span class="t-prompt">❯</span> <span class="t-cmd">whoami</span></p>
           <p class="t-out">${escHtml(config.author)} <span class="t-dim">// ${escHtml(config.tagline)}</span></p>
-          <p><span class="t-prompt">❯</span> <span class="t-cmd">cat about.txt</span></p>
-          <p class="t-out">${escHtml(config.description)}</p>
+          <p><span class="t-prompt">❯</span> <span class="t-cmd">git log --oneline -${Math.min(3, posts.length)}</span></p>
+${gitLogLines}
           <p><span class="t-prompt">❯</span> <span class="t-cmd">ls posts/</span> <span class="cursor-blink">▋</span></p>
         </div>
       </div>
