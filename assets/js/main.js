@@ -320,7 +320,14 @@
       link.classList.add('active');
     }
   });
+
+  // Hide the logo cursor on pages that have their own blinking cursor (about page)
+  const logoCursor = document.querySelector('.site-logo .cursor');
+  if (logoCursor && path.startsWith('/about')) {
+    logoCursor.style.display = 'none';
+  }
 })();
+
 
 /* ─── Copy-code buttons ────────────────────────────────────────────────────────── */
 (function () {

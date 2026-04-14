@@ -350,6 +350,54 @@ function postTemplate(post, htmlContent, prevPost, nextPost) {
       </a>`
     : '<span></span>';
 
+  // Build Giscus comments block
+  const c = config.comments || {};
+  const commentsHtml = (c.provider === 'giscus' && c.repoId && c.categoryId)
+    ? `<section class="comments-section">
+        <div class="comments-header">
+          <span class="comments-title"><span class="comments-title-prompt">//</span> comments</span>
+          <span class="comments-note">via GitHub Discussions</span>
+        </div>
+        <script src="https://giscus.app/client.js"
+          data-repo="${escHtml(c.repo)}"
+          data-repo-id="${escHtml(c.repoId)}"
+          data-category="${escHtml(c.category)}"
+          data-category-id="${escHtml(c.categoryId)}"
+          data-mapping="${escHtml(c.mapping || 'pathname')}"
+          data-strict="0"
+          data-reactions-enabled="1"
+          data-emit-metadata="0"
+          data-input-position="bottom"
+          data-theme="${escHtml(c.theme || 'dark_dimmed')}"
+          data-lang="en"
+          crossorigin="anonymous"
+          async>
+        </scr` + `ipt>
+      </section>`
+    : (c.provider === 'giscus'
+        ? `<section class="comments-section comments-unconfigured">
+            <div class="comments-header">
+              <span class="comments-title"><span class="comments-title-prompt">//</span> comments</span>
+            </div>
+            <div class="terminal-window" style="max-width:100%">
+              <div class="terminal-body" style="font-size:.8rem">
+                <p><span class="t-prompt">❯</span> <span class="t-cmd">giscus --status</span></p>
+                ${c.repoId
+                  ? `<p class="t-out"><span class="t-green">✓</span> repoId      <span class="t-dim">${escHtml(c.repoId)}</span></p>`
+                  : `<p class="t-out"><span class="t-yellow">✗</span> repoId      <span class="t-dim">not set</span></p>`}
+                <p class="t-out"><span class="t-yellow">✗</span> categoryId  <span class="t-dim">not set</span></p>
+                <p class="t-out">&nbsp;</p>
+                <p class="t-out"><span class="t-dim">Remaining steps:</span></p>
+                ${!c.repoId ? `<p class="t-out"><span class="t-dim">  1. Get repoId from https://giscus.app</span></p>` : ''}
+                <p class="t-out"><span class="t-dim">  ${!c.repoId ? '2' : '1'}. Enable Discussions: github.com/dante0747/coderator.dev/settings</span></p>
+                <p class="t-out"><span class="t-dim">  ${!c.repoId ? '3' : '2'}. Install giscus app: github.com/apps/giscus</span></p>
+                <p class="t-out"><span class="t-dim">  ${!c.repoId ? '4' : '3'}. Visit https://giscus.app → copy categoryId → paste in config.js</span></p>
+              </div>
+            </div>
+          </section>`
+        : '');
+
+
   return `
   <article class="post-layout">
     ${coverHtml}
@@ -372,6 +420,9 @@ function postTemplate(post, htmlContent, prevPost, nextPost) {
           ${tagPills(post.tags)}
         </div>
       </footer>
+
+      <!-- 💬 Comments + reactions (via Giscus — requires GitHub login, truly one-per-user) -->
+      ${commentsHtml}
     </div>
     <nav class="post-navigation" aria-label="Post navigation">
       <div class="container">
@@ -388,7 +439,7 @@ function pageTemplate(title, htmlContent) {
   return `
   <div class="page-layout">
     <div class="post-container">
-      <h1 class="post-title">${escHtml(title)}</h1>
+      <h1 class="post-title page-cmd-title"><span class="t-prompt">❯</span> <span class="t-cmd">${escHtml(title)}</span><span class="cursor-blink">▋</span></h1>
       <div class="post-content">${htmlContent}</div>
     </div>
   </div>`;
@@ -423,6 +474,7 @@ function notFoundTemplate() {
 }
 
 // ─── Icons ─────────────────────────────────────────────────────────────────────
+
 
 function iconGithub() {
   return `<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 0C5.37 0 0 5.37 0 12c0 5.31 3.435 9.795 8.205 11.385.6.105.825-.255.825-.57 0-.285-.015-1.23-.015-2.235-3.015.555-3.795-.735-4.035-1.41-.135-.345-.72-1.41-1.23-1.695-.42-.225-1.02-.78-.015-.795.945-.015 1.62.87 1.845 1.23 1.08 1.815 2.805 1.305 3.495.99.105-.78.42-1.305.765-1.605-2.67-.3-5.46-1.335-5.46-5.925 0-1.305.465-2.385 1.23-3.225-.12-.3-.54-1.53.12-3.18 0 0 1.005-.315 3.3 1.23.96-.27 1.98-.405 3-.405s2.04.135 3 .405c2.295-1.56 3.3-1.23 3.3-1.23.66 1.65.24 2.88.12 3.18.765.84 1.23 1.905 1.23 3.225 0 4.605-2.805 5.625-5.475 5.925.435.375.81 1.095.81 2.22 0 1.605-.015 2.895-.015 3.3 0 .315.225.69.825.57A12.02 12.02 0 0 0 24 12c0-6.63-5.37-12-12-12z"/></svg>`;

@@ -121,7 +121,7 @@ img, video { max-width: 100%; height: auto; display: block; }
 .site-logo .cursor {
   color: var(--cyan);
   animation: blink 1.1s step-end infinite;
-  margin-left: 1px;
+  margin-left: 0.35em;
 }
 @keyframes blink { 50% { opacity: 0; } }
 
@@ -259,6 +259,8 @@ img, video { max-width: 100%; height: auto; display: block; }
   letter-spacing: .02em;
 }
 .section-title-prompt { color: var(--cyan); margin-right: .4rem; }
+.post-content h2 .section-title-prompt,
+.post-content h3 .section-title-prompt { color: var(--cyan); font-weight: 400; }
 .post-count {
   font-family: var(--font-mono);
   font-size: .72rem;
@@ -511,6 +513,7 @@ img, video { max-width: 100%; height: auto; display: block; }
   font-family: var(--font-mono); font-size: .78rem; color: var(--cyan);
 }
 .post-content td { padding: .625rem 1rem; border: 1px solid var(--border); vertical-align: top; }
+.post-content td:first-child { white-space: nowrap; }
 .post-content tr:nth-child(even) td { background: rgba(255,255,255,.02); }
 
 /* ─── Post footer ─────────────────────────────────────────────────────────────── */
@@ -520,6 +523,36 @@ img, video { max-width: 100%; height: auto; display: block; }
   display: flex; align-items: center; gap: .75rem; flex-wrap: wrap;
 }
 .footer-tags-label { font-family: var(--font-mono); font-size: .72rem; color: var(--text-muted); }
+
+
+/* ─── Comments Section ────────────────────────────────────────────────────────── */
+.comments-section {
+  margin-top: 2rem;
+  padding-top: 2rem;
+  border-top: 1px solid var(--border);
+}
+.comments-header {
+  display: flex;
+  align-items: baseline;
+  gap: 1rem;
+  margin-bottom: 1.5rem;
+}
+.comments-title {
+  font-family: var(--font-mono);
+  font-size: .9rem;
+  font-weight: 400;
+  color: var(--text-secondary);
+  letter-spacing: .02em;
+}
+.comments-title-prompt { color: var(--cyan); margin-right: .4rem; }
+.comments-note {
+  font-family: var(--font-mono);
+  font-size: .72rem;
+  color: var(--text-muted);
+}
+/* let Giscus iframe inherit background */
+.giscus, .giscus-frame { width: 100%; }
+
 
 /* ─── Post navigation ─────────────────────────────────────────────────────────── */
 .post-navigation { margin-top: 3rem; border-top: 1px solid var(--border); padding-top: 2rem; }
@@ -544,6 +577,27 @@ img, video { max-width: 100%; height: auto; display: block; }
 /* ─── Static page ─────────────────────────────────────────────────────────────── */
 .page-layout { padding-bottom: 6rem; }
 .page-layout .post-container { padding-top: 3rem; }
+
+.page-cmd-title .cursor-blink {
+  font-size: 0.7em;
+  display: inline-block;
+  transform: scaleX(0.45);
+  transform-origin: left center;
+  margin-left: 0.35em;
+  position: relative;
+  top: -4px;
+}
+.page-cmd-title .t-prompt,
+.post-content h2 .t-prompt,
+.post-content h3 .t-prompt { color: var(--green); margin-right: .4rem; }
+
+.page-cmd-title .t-cmd,
+.post-content h2 .t-cmd,
+.post-content h3 .t-cmd {
+  font-family: var(--font-mono);
+  color: var(--text);
+  font-weight: 600;
+}
 
 /* ─── About avatar ────────────────────────────────────────────────────────────── */
 .about-avatar {
