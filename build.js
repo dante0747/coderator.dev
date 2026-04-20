@@ -139,8 +139,19 @@ function baseTemplate({ title, description, image = '', content, url = '', type 
     ...(sameAs.length ? { sameAs } : {}),
   };
 
+  const publisherSchema = {
+    '@type': 'Organization',
+    'name': config.title,
+    'url': config.baseUrl,
+    'logo': {
+      '@type': 'ImageObject',
+      'url': `${config.baseUrl}/assets/images/logo.png`,
+    },
+  };
+
   let jsonLd;
   if (type === 'article') {
+    const dtPublished = publishedTime ? (publishedTime.includes('T') ? publishedTime : `${publishedTime}T00:00:00Z`) : undefined;
     jsonLd = {
       '@context': 'https://schema.org',
       '@type': 'BlogPosting',
@@ -148,9 +159,9 @@ function baseTemplate({ title, description, image = '', content, url = '', type 
       'description': description,
       'image': ogImg,
       'url': canonicalUrl,
-      ...(publishedTime ? { 'datePublished': publishedTime, 'dateModified': publishedTime } : {}),
+      ...(dtPublished ? { 'datePublished': dtPublished, 'dateModified': dtPublished } : {}),
       'author': authorSchema,
-      'publisher': authorSchema,
+      'publisher': publisherSchema,
       'mainEntityOfPage': { '@type': 'WebPage', '@id': canonicalUrl },
     };
   } else {
@@ -164,8 +175,11 @@ function baseTemplate({ title, description, image = '', content, url = '', type 
     };
   }
 
+  // Ensure full ISO 8601 datetime for Open Graph article timestamps
+  const isoDateTime = (d) => d ? (d.includes('T') ? d : `${d}T00:00:00Z`) : '';
+
   const articleMeta = (type === 'article' && publishedTime)
-    ? `\n  <meta property="article:published_time" content="${publishedTime}">\n  <meta property="article:author" content="${escHtml(config.author)}">`
+    ? `\n  <meta property="article:published_time" content="${isoDateTime(publishedTime)}">\n  <meta property="article:author" content="${escHtml(config.author)}">`
     : '';
 
   const navLinks = config.nav
@@ -189,6 +203,7 @@ function baseTemplate({ title, description, image = '', content, url = '', type 
   <title>${escHtml(title)}</title>
   <meta name="description" content="${escHtml(description)}">
   <meta name="author" content="${escHtml(config.author)}">
+  <meta name="robots" content="index, follow">
   <link rel="canonical" href="${canonicalUrl}">
   <meta property="og:title" content="${escHtml(title)}">
   <meta property="og:description" content="${escHtml(description)}">
