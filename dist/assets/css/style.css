@@ -1411,6 +1411,21 @@ html.cmdk-open { overflow: hidden; }
   .cmdk-foot { display: none; }
 }
 
+/* ─── Projects with a multi-colour brand gradient (e.g. SpecLift) ─────────────── */
+.has-gradient.project-card::before { background: var(--brand-gradient); }
+.has-gradient .project-tagline,
+.has-gradient .project-hero-tagline {
+  background: var(--brand-gradient);
+  -webkit-background-clip: text; background-clip: text; color: transparent;
+  width: fit-content;
+}
+.project-page.has-gradient .btn.btn-accent {
+  background: var(--brand-gradient);
+  border-color: transparent;
+  color: #07101a;
+}
+.project-page.has-gradient .project-title-row img { border-radius: 16px; }
+
 @media (hover: none) {
   .spotlight::after { display: none; }
   .cmdk-meta kbd, .cmdk-search kbd { display: none; }

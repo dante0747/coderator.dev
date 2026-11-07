@@ -184,7 +184,15 @@ function hexToRgb(hex) {
 
 /** Inline CSS variables that tint a card or page with the project's brand colour. */
 function accentStyle(p) {
-  return escHtml(`--accent:${p.accent};--accent-rgb:${hexToRgb(p.accent)};--accent2:${p.accent2 || p.accent}`);
+  const gradient = p.gradient && p.gradient.length > 1
+    ? `;--brand-gradient:linear-gradient(90deg, ${p.gradient.join(', ')})`
+    : '';
+  return escHtml(`--accent:${p.accent};--accent-rgb:${hexToRgb(p.accent)};--accent2:${p.accent2 || p.accent}${gradient}`);
+}
+
+/** Extra class for projects that define a multi-colour brand gradient. */
+function gradientClass(p) {
+  return p.gradient && p.gradient.length > 1 ? ' has-gradient' : '';
 }
 
 function hostLabel(url) {
@@ -225,6 +233,7 @@ function readProjects() {
         repo:     data.repo || '',
         accent:   data.accent || '#00d4ff',
         accent2:  data.accent2 || '',
+        gradient: toArray(data.gradient).map(String),
         logo:     data.logo || '',
         image:    data.image || '',
         stack:    toArray(data.stack).map(String),
@@ -522,7 +531,7 @@ function projectCard(p) {
   const facts = repoFacts(p.gh);
 
   return `
-      <article class="project-card spotlight" style="${accentStyle(p)}">
+      <article class="project-card spotlight${gradientClass(p)}" style="${accentStyle(p)}">
         ${cover}
         <div class="project-card-body">
           <header class="project-head">
@@ -866,7 +875,7 @@ function projectTemplate(p, htmlContent, related, prevProject, nextProject) {
     : '<span></span>';
 
   return `
-  <article class="project-page" style="${accentStyle(p)}">
+  <article class="project-page${gradientClass(p)}" style="${accentStyle(p)}">
     <header class="project-hero">
       <div class="container">
         <nav class="crumbs" aria-label="Breadcrumb">

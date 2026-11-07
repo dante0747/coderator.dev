@@ -8,7 +8,9 @@ summary: "Convert Swagger 2.0 specs to OpenAPI 3 entirely in your browser. Your 
 url: https://speclift.coderator.dev/
 urlLabel: open converter
 repo: dante0747/spec-lift
-accent: "#FF7A55"
+accent: "#38E1FF"
+# SpecLift's brand gradient (used on the card edge, tagline and main button)
+gradient: ["#B8F84A", "#38E1FF", "#9B8BFF"]
 logo: assets/images/projects/speclift-logo.svg
 image: assets/images/projects/speclift-cover.jpg
 stack: [TypeScript, React, Next.js, Tailwind CSS, Vite]
