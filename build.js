@@ -449,7 +449,10 @@ function baseTemplate({ title, description, image = '', content, url = '', type 
   <meta name="twitter:description" content="${escHtml(description)}">
   <meta name="twitter:image" content="${ogImg}">
   <meta name="twitter:image:alt" content="${ogAlt}">${relMe}
-  <link rel="icon" href="/favicon.ico">
+  <link rel="icon" href="/favicon.ico" sizes="32x32">
+  <link rel="icon" href="/favicon.svg" type="image/svg+xml">
+  <link rel="apple-touch-icon" href="/apple-touch-icon.png">
+  <link rel="manifest" href="/site.webmanifest">
   <link rel="alternate" type="application/rss+xml" title="${escHtml(config.title)} RSS Feed" href="/feed.xml">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -465,6 +468,7 @@ function baseTemplate({ title, description, image = '', content, url = '', type 
     <div class="container">
       <div class="header-inner">
         <a href="/" class="site-logo" aria-label="Home">
+          <img class="site-logo-mark" src="/assets/brand/logo.svg" alt="" width="28" height="28">
           <span class="prompt">~/</span><span class="logo-text">${escHtml(config.title)}</span><span class="cursor">▋</span>
         </a>
         <nav class="site-nav" id="site-nav">
@@ -1282,7 +1286,7 @@ async function build() {
   // Copy static assets
   if (fs.existsSync(ASSETS)) fs.copySync(ASSETS, path.join(DIST, 'assets'));
   copyHighlightCss();
-  ['CNAME', 'favicon.ico'].forEach(f => {
+  ['CNAME', 'favicon.ico', 'favicon.svg', 'apple-touch-icon.png', 'site.webmanifest'].forEach(f => {
     if (fs.existsSync(path.join(ROOT, f))) fs.copySync(path.join(ROOT, f), path.join(DIST, f));
   });
 

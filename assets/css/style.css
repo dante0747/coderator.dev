@@ -141,6 +141,12 @@ img, video { max-width: 100%; height: auto; display: block; }
   display: flex; align-items: center;
 }
 .site-logo:hover { color: var(--text); }
+.site-logo-mark {
+  width: 28px; height: 28px;
+  margin-right: .65rem;
+  transition: transform var(--t), filter var(--t);
+}
+.site-logo:hover .site-logo-mark { transform: rotate(-6deg) scale(1.06); filter: drop-shadow(0 0 10px rgba(0, 212, 255, .35)); }
 .site-logo .prompt { color: var(--green); }
 .site-logo .logo-text { color: var(--text); }
 .site-logo .cursor {
