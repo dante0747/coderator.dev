@@ -1,0 +1,16 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="64" height="64" viewBox="0 0 64 64">
+  <!-- Full-bleed version for app icons: the OS rounds the corners itself. -->
+  <defs>
+    <linearGradient id="cq-bg" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#16161f"/><stop offset="1" stop-color="#08080d"/></linearGradient>
+    <linearGradient id="cq-g" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#00d4ff"/><stop offset="1" stop-color="#c084fc"/></linearGradient>
+    <path id="cq-brace" d="M19 15h-1.5a4.5 4.5 0 0 0-4.5 4.5V27a5 5 0 0 1-5 5 5 5 0 0 1 5 5v7.5a4.5 4.5 0 0 0 4.5 4.5H19"/>
+  </defs>
+  <rect width="64" height="64" fill="url(#cq-bg)"/>
+  <g transform="translate(32 32) scale(.74) translate(-32 -32)">
+    <g fill="none" stroke="url(#cq-g)" stroke-width="4.5" stroke-linecap="round" stroke-linejoin="round">
+      <use href="#cq-brace"/>
+      <use href="#cq-brace" transform="matrix(-1 0 0 1 64 0)"/>
+    </g>
+    <path d="M36.2 27.8A6 6 0 1 0 36.2 36.2" fill="none" stroke="#ededf3" stroke-width="5" stroke-linecap="round"/>
+  </g>
+</svg>

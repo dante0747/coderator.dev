@@ -6,7 +6,8 @@
     "build":   "node build.js",
     "dev":     "node build.js --watch",
     "serve":   "node serve.js",
-    "preview": "node build.js && node serve.js"
+    "preview": "node build.js && node serve.js",
+    "icons":   "node scripts/build-icons.js"
   },
   "dependencies": {
     "chokidar": "^3.6.0",

@@ -87,6 +87,9 @@ assets/
   js/main.js      ← scroll bar, copy-code, mobile nav
   images/         ← images referenced by posts
   images/projects ← project logos and preview images
+  brand/          ← {c} logo sources (SVG); `npm i --no-save sharp && npm run icons`
+                    regenerates favicon.ico/.svg, apple-touch-icon.png, assets/icons/
+                    and site.webmanifest after a logo change
 scripts/
   build.cmd       ← build shortcut (works without npm in PATH)
   preview.cmd     ← build + serve shortcut

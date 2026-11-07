@@ -31,6 +31,7 @@ const MIME = {
   '.ttf':  'font/ttf',
   '.eot':  'application/vnd.ms-fontobject',
   '.xml':  'application/xml',
+  '.webmanifest': 'application/manifest+json',
   '.txt':  'text/plain',
 };
 
