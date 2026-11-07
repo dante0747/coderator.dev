@@ -286,64 +286,115 @@ async function fetchRepoStats(repo) {
 
 // ─── Base template ─────────────────────────────────────────────────────────────
 
-function baseTemplate({ title, description, image = '', content, url = '', type = 'website', publishedTime = '', jsonLd: customJsonLd = null }) {
+/** Stable IDs so every page's structured data points at the same person and site. */
+const PERSON_ID  = `${config.baseUrl}/#person`;
+const WEBSITE_ID = `${config.baseUrl}/#website`;
+
+function socialProfiles() {
+  return [
+    config.github   && `https://github.com/${config.github}`,
+    config.linkedin && `https://www.linkedin.com/in/${config.linkedin}`,
+    config.twitter  && `https://twitter.com/${config.twitter}`,
+  ].filter(Boolean);
+}
+
+/**
+ * @param {object}   opts
+ * @param {object}   [opts.jsonLd]       main schema.org entity for the page (merged into an @graph)
+ * @param {Array}    [opts.breadcrumbs]  [[name, path], …] for a BreadcrumbList
+ * @param {boolean}  [opts.noindex]      keep the page out of search results
+ * @param {string}   [opts.imageAlt]     alt text for the social preview image
+ */
+function baseTemplate({ title, description, image = '', content, url = '', type = 'website', publishedTime = '',
+                        jsonLd: customJsonLd = null, breadcrumbs = null, noindex = false, imageAlt = '' }) {
   const ogImg = image
     ? `${config.baseUrl}/${image.replace(/^\//, '')}`
     : `${config.baseUrl}/assets/images/avatar.png`;
 
   const canonicalUrl = url || `${config.baseUrl}/`;
+  const isHome = canonicalUrl === `${config.baseUrl}/`;
+  const sameAs = socialProfiles();
 
-  // Build sameAs links for structured data
-  const sameAs = [
-    config.github   && `https://github.com/${config.github}`,
-    config.linkedin && `https://www.linkedin.com/in/${config.linkedin}`,
-    config.twitter  && `https://twitter.com/${config.twitter}`,
-  ].filter(Boolean);
-
-  const authorSchema = {
+  // One Person and one WebSite, referenced by @id from every page
+  const personSchema = {
     '@type': 'Person',
-    'name': config.author,
-    'url': `${config.baseUrl}/about/`,
+    '@id': PERSON_ID,
+    name: config.author,
+    url: `${config.baseUrl}/`,
+    image: `${config.baseUrl}/assets/images/avatar.png`,
+    ...(config.jobTitle ? { jobTitle: config.jobTitle } : {}),
+    description: config.personDescription || config.description,
+    ...(config.knowsAbout ? { knowsAbout: config.knowsAbout } : {}),
     ...(sameAs.length ? { sameAs } : {}),
   };
-
-  const publisherSchema = {
-    '@type': 'Organization',
-    'name': config.title,
-    'url': config.baseUrl,
-    'logo': {
-      '@type': 'ImageObject',
-      'url': `${config.baseUrl}/assets/images/logo.png`,
-    },
+  const websiteSchema = {
+    '@type': 'WebSite',
+    '@id': WEBSITE_ID,
+    url: `${config.baseUrl}/`,
+    name: config.title,
+    alternateName: config.author,
+    description: config.description,
+    inLanguage: 'en',
+    author: { '@id': PERSON_ID },
+    publisher: { '@id': PERSON_ID },
   };
+  const me = { '@id': PERSON_ID };
 
-  let jsonLd;
+  let main;
   if (customJsonLd) {
-    jsonLd = { '@context': 'https://schema.org', ...customJsonLd, author: authorSchema };
+    main = { '@id': canonicalUrl, url: canonicalUrl, isPartOf: { '@id': WEBSITE_ID }, ...customJsonLd };
   } else if (type === 'article') {
     const dtPublished = publishedTime ? (publishedTime.includes('T') ? publishedTime : `${publishedTime}T00:00:00Z`) : undefined;
-    jsonLd = {
-      '@context': 'https://schema.org',
+    main = {
       '@type': 'BlogPosting',
-      'headline': title.replace(/\s*\|.*$/, ''),
-      'description': description,
-      'image': ogImg,
-      'url': canonicalUrl,
-      ...(dtPublished ? { 'datePublished': dtPublished, 'dateModified': dtPublished } : {}),
-      'author': authorSchema,
-      'publisher': publisherSchema,
-      'mainEntityOfPage': { '@type': 'WebPage', '@id': canonicalUrl },
+      '@id': `${canonicalUrl}#article`,
+      headline: title.replace(/\s*\|.*$/, ''),
+      description,
+      image: ogImg,
+      url: canonicalUrl,
+      ...(dtPublished ? { datePublished: dtPublished, dateModified: dtPublished } : {}),
+      author: me,
+      publisher: me,
+      isPartOf: { '@id': WEBSITE_ID },
+      mainEntityOfPage: { '@type': 'WebPage', '@id': canonicalUrl },
+      inLanguage: 'en',
     };
   } else {
-    jsonLd = {
-      '@context': 'https://schema.org',
-      '@type': canonicalUrl === `${config.baseUrl}/` ? 'WebSite' : 'WebPage',
-      'name': title,
-      'description': description,
-      'url': canonicalUrl,
-      'author': authorSchema,
+    main = {
+      '@type': 'WebPage',
+      '@id': canonicalUrl,
+      url: canonicalUrl,
+      name: title,
+      description,
+      isPartOf: { '@id': WEBSITE_ID },
+      ...(isHome ? { about: me, mainEntity: me } : { author: me }),
+      inLanguage: 'en',
     };
   }
+
+  const graph = [websiteSchema, personSchema, main];
+  if (breadcrumbs && breadcrumbs.length) {
+    graph.push({
+      '@type': 'BreadcrumbList',
+      itemListElement: breadcrumbs.map(([name, href], i) => ({
+        '@type': 'ListItem',
+        position: i + 1,
+        name,
+        item: href.startsWith('http') ? href : `${config.baseUrl}${href}`,
+      })),
+    });
+  }
+  const jsonLd = { '@context': 'https://schema.org', '@graph': graph };
+
+  const robots = noindex
+    ? 'noindex, follow'
+    : 'index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1';
+  const ogAlt = escHtml(imageAlt || (image ? title : config.author));
+  const relMe = sameAs.map(href => `\n  <link rel="me" href="${href}">`).join('');
+  const [firstName, ...rest] = config.author.split(' ');
+  const profileMeta = type === 'profile'
+    ? `\n  <meta property="profile:first_name" content="${escHtml(firstName)}">\n  <meta property="profile:last_name" content="${escHtml(rest.join(' '))}">`
+    : '';
 
   // Ensure full ISO 8601 datetime for Open Graph article timestamps
   const isoDateTime = (d) => d ? (d.includes('T') ? d : `${d}T00:00:00Z`) : '';
@@ -382,19 +433,22 @@ function baseTemplate({ title, description, image = '', content, url = '', type 
   <title>${escHtml(title)}</title>
   <meta name="description" content="${escHtml(description)}">
   <meta name="author" content="${escHtml(config.author)}">
-  <meta name="robots" content="index, follow">
+  <meta name="robots" content="${robots}">
   <link rel="canonical" href="${canonicalUrl}">
+  <meta name="theme-color" content="#07070b">
   <meta property="og:title" content="${escHtml(title)}">
   <meta property="og:description" content="${escHtml(description)}">
   <meta property="og:image" content="${ogImg}">
+  <meta property="og:image:alt" content="${ogAlt}">
   <meta property="og:type" content="${type}">
   <meta property="og:url" content="${canonicalUrl}">
   <meta property="og:site_name" content="${escHtml(config.title)}">
-  <meta property="og:locale" content="en_US">${articleMeta}
-  <meta name="twitter:card" content="summary_large_image">
+  <meta property="og:locale" content="en_US">${articleMeta}${profileMeta}
+  <meta name="twitter:card" content="${image ? 'summary_large_image' : 'summary'}">
   <meta name="twitter:title" content="${escHtml(title)}">
   <meta name="twitter:description" content="${escHtml(description)}">
   <meta name="twitter:image" content="${ogImg}">
+  <meta name="twitter:image:alt" content="${ogAlt}">${relMe}
   <link rel="icon" href="/favicon.ico">
   <link rel="alternate" type="application/rss+xml" title="${escHtml(config.title)} RSS Feed" href="/feed.xml">
   <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -688,6 +742,7 @@ function indexTemplate(posts, projects) {
         <h1 class="hero-name">${escHtml(config.author)}<span class="hero-dot">.</span></h1>
         <p class="hero-role">${escHtml(P.role || config.tagline)}</p>
         <p class="hero-intro">${escHtml(P.intro || config.description)}</p>
+        ${P.introMore ? `<p class="hero-more">${escHtml(P.introMore.text)} <a href="${escHtml(P.introMore.href)}">${escHtml(P.introMore.label)} ${icon('arrow', 15)}</a></p>` : ''}
         <div class="hero-actions">
           <a href="#projects" class="btn btn-primary">${icon('grid')} explore projects</a>
           <a href="/blog/" class="btn">read the blog</a>
@@ -1140,7 +1195,9 @@ function buildSitemap(posts, pageSlugs, projects = []) {
     entry(`${config.baseUrl}/`, now, 'weekly', '1.0'),
     entry(`${config.baseUrl}/projects/`, now, 'weekly', '0.9'),
     entry(`${config.baseUrl}/blog/`, now, 'weekly', '0.8'),
-    ...projects.filter(p => p.hasPage).map(p => entry(`${config.baseUrl}${p.pageUrl}`, now, 'weekly', '0.9')),
+    // A project page changes when its repo does (stars, "updated" date), so use the last push
+    ...projects.filter(p => p.hasPage).map(p =>
+      entry(`${config.baseUrl}${p.pageUrl}`, (p.gh && p.gh.pushedAt ? p.gh.pushedAt : now).slice(0, 10), 'weekly', '0.9')),
     ...pageSlugs.map(slug => entry(`${config.baseUrl}/${slug}/`, now, 'monthly', '0.8')),
   ];
   const postUrls = posts.map(p =>
@@ -1244,6 +1301,8 @@ async function build() {
       url:           `${config.baseUrl}${post.url}`,
       type:          'article',
       publishedTime: post.date,
+      imageAlt:      post.title,
+      breadcrumbs:   [['Home', '/'], ['Blog', '/blog/'], [post.title, post.url]],
     });
     const dir = path.join(DIST, 'posts', post.slug);
     fs.ensureDirSync(dir);
@@ -1253,7 +1312,7 @@ async function build() {
 
   // Index (portal)
   const indexPage = baseTemplate({
-    title:       `${config.author} · ${config.title}`,
+    title:       `${config.author} · ${config.jobTitle || config.tagline} | ${config.title}`,
     description: config.description,
     content:     indexTemplate(posts, projects),
     url:         `${config.baseUrl}/`,
@@ -1263,19 +1322,41 @@ async function build() {
   console.log(`  ✓  /index.html`);
 
   // Blog listing
+  const blogUrl = `${config.baseUrl}/blog/`;
   writePage('blog', baseTemplate({
-    title:       `Blog | ${config.title}`,
-    description: 'Articles on Java, Spring Boot, design patterns and software craftsmanship.',
+    title:       `Blog: Java, Spring Boot & Software Design | ${config.title}`,
+    description: `Articles by ${config.author} on Java, Spring Boot, design patterns and software craftsmanship.`,
     content:     blogIndexTemplate(posts),
-    url:         `${config.baseUrl}/blog/`,
+    url:         blogUrl,
+    breadcrumbs: [['Home', '/'], ['Blog', '/blog/']],
+    jsonLd: {
+      '@type':  'Blog',
+      name:     `${config.title} blog`,
+      author:   { '@id': PERSON_ID },
+      blogPost: posts.map(p => ({ '@id': `${config.baseUrl}${p.url}#article` })),
+    },
   }));
 
   // Projects listing
+  const projectsUrl = `${config.baseUrl}/projects/`;
   writePage('projects', baseTemplate({
-    title:       `Open-source projects | ${config.title}`,
-    description: `Open-source projects by ${config.author}: ${projects.map(p => p.name).join(', ')}.`,
+    title:       `Open-Source Projects by ${config.author} | ${config.title}`,
+    description: `Free, open-source projects by ${config.author}: ` +
+                 projects.map(p => p.name).join(', ') + '. No ads, no trackers, no sign-up.',
     content:     projectsIndexTemplate(projects),
-    url:         `${config.baseUrl}/projects/`,
+    url:         projectsUrl,
+    breadcrumbs: [['Home', '/'], ['Projects', '/projects/']],
+    jsonLd: {
+      '@type': 'CollectionPage',
+      name:    `Open-source projects by ${config.author}`,
+      author:  { '@id': PERSON_ID },
+      mainEntity: {
+        '@type': 'ItemList',
+        itemListElement: projects.filter(p => p.hasPage).map((p, i) => ({
+          '@type': 'ListItem', position: i + 1, url: `${config.baseUrl}${p.pageUrl}`, name: p.name,
+        })),
+      },
+    },
   }));
 
   // Project pages
@@ -1283,22 +1364,35 @@ async function build() {
   withPages.forEach((p, i) => {
     const related = posts.filter(post => post.tags.some(t => p.tags.includes(String(t).toLowerCase())));
     const canonical = `${config.baseUrl}${p.pageUrl}`;
+    const category = p.category ? p.category[0].toUpperCase() + p.category.slice(1) : p.tagline;
     writePage(path.join('projects', p.slug), baseTemplate({
-      title:       `${p.name}: ${p.tagline} | ${config.title}`,
+      title:       `${p.name}: ${category} | ${config.title}`,
       description: p.summary,
       image:       p.image,
+      imageAlt:    `${p.name}: ${p.tagline}`,
       content:     projectTemplate(p, marked.parse(p.body), related, withPages[i - 1] || null, withPages[i + 1] || null),
       url:         canonical,
+      breadcrumbs: [['Home', '/'], ['Projects', '/projects/'], [p.name, p.pageUrl]],
       jsonLd: {
-        '@type':               'SoftwareApplication',
-        name:                  p.name,
+        '@type':               'WebPage',
+        name:                  `${p.name}: ${p.tagline}`,
         description:           p.summary,
-        url:                   p.url || canonical,
-        ...(p.image ? { image: `${config.baseUrl}${assetUrl(p.image)}` } : {}),
-        applicationCategory:   'WebApplication',
-        operatingSystem:       'Any (web browser)',
-        offers:                { '@type': 'Offer', price: '0', priceCurrency: 'USD' },
-        ...(p.repo ? { sameAs: [`https://github.com/${p.repo}`] } : {}),
+        author:                { '@id': PERSON_ID },
+        mainEntity: {
+          '@type':               'SoftwareApplication',
+          '@id':                 `${canonical}#app`,
+          name:                  p.name,
+          description:           p.summary,
+          url:                   p.url || canonical,
+          ...(p.image ? { image: `${config.baseUrl}${assetUrl(p.image)}`, screenshot: `${config.baseUrl}${assetUrl(p.image)}` } : {}),
+          applicationCategory:   'WebApplication',
+          operatingSystem:       'Any (web browser)',
+          isAccessibleForFree:   true,
+          offers:                { '@type': 'Offer', price: '0', priceCurrency: 'USD' },
+          author:                { '@id': PERSON_ID },
+          ...(p.gh && p.gh.license ? { license: `https://spdx.org/licenses/${p.gh.license}.html` } : {}),
+          ...(p.repo ? { sameAs: [`https://github.com/${p.repo}`] } : {}),
+        },
       },
     }));
   });
@@ -1310,12 +1404,24 @@ async function build() {
       const { data, content: body } = matter(raw);
       const slug = path.basename(file, '.md');
       const html = marked.parse(body);
+      const pageUrl = `${config.baseUrl}/${slug}/`;
+      const isAbout = slug === 'about';
+      const label = data.seoTitle || data.title || slug;
       const page = baseTemplate({
-        title:       `${data.title || slug} | ${config.title}`,
+        title:       `${label} | ${config.title}`,
         description: data.description || '',
         content:     pageTemplate(data.title || slug, html),
-        url:         `${config.baseUrl}/${slug}/`,
-        type:        'website',
+        url:         pageUrl,
+        type:        isAbout ? 'profile' : 'website',
+        breadcrumbs: [['Home', '/'], [label, `/${slug}/`]],
+        // The about page is a profile of the person behind the site
+        jsonLd: isAbout ? {
+          '@type':     'ProfilePage',
+          name:        label,
+          description: data.description || '',
+          mainEntity:  { '@id': PERSON_ID },
+          about:       { '@id': PERSON_ID },
+        } : null,
       });
       const dir = path.join(DIST, slug);
       fs.ensureDirSync(dir);
@@ -1329,6 +1435,8 @@ async function build() {
     title:       `404 | ${config.title}`,
     description: 'Page not found',
     content:     notFoundTemplate(),
+    url:         `${config.baseUrl}/404.html`,
+    noindex:     true,
   });
   fs.writeFileSync(path.join(DIST, '404.html'), notFound);
   console.log(`  ✓  /404.html`);

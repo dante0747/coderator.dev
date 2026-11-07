@@ -1,11 +1,12 @@
 ---
 title: "whoami"
-description: "15 years of software engineering, a passion for architecture and design, and a blog that tries to make sense of it all."
+seoTitle: "About Majid Abarghooei, Software Engineer"
+description: "16+ years of software engineering, a passion for architecture and design, and a blog that tries to make sense of it all."
 ---
 
 <img src="/assets/images/avatar.png" alt="Majid" class="about-avatar">
 
-Hey, I'm **Majid** — a software engineer with 15+ years of experience building things that (hopefully) work well and
+Hey, I'm **Majid** — a software engineer with 16+ years of experience building things that (hopefully) work well and
 last.
 
 My background is in software engineering, but over the years I've worn a few different hats: developer, chapter lead,

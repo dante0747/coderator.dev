@@ -1,20 +1,28 @@
 /** @type {SiteConfig} */
 module.exports = {
   title: 'coderator.dev',
-  description: 'Open-source projects and writing by Majid Abarghooei: GameBeeper, GeeksPulse, SpecLift, and articles on Java, Spring Boot and software design.',
-  tagline: 'software engineer & open-source builder',
+  /** Default meta description (homepage, RSS); keep it under ~155 characters for search results. */
+  description: 'Software engineer Majid Abarghooei: open-source projects (GameBeeper, GeeksPulse, SpecLift) and writing on Java, Spring Boot and software design.',
+  tagline: 'software engineer',
+
+  /** Used in search-engine structured data (schema.org Person). */
+  jobTitle: 'Software Engineer',
+  personDescription: 'Software engineer with 16+ years of experience in software architecture and design, ' +
+                     'and creator of the open-source projects GameBeeper, GeeksPulse and SpecLift.',
+  knowsAbout: ['Software architecture', 'Software design', 'Design patterns', 'Java', 'Spring Boot',
+               'Distributed systems', 'Open source'],
 
   /** Homepage copy. Edit freely; plain text only. */
   portal: {
     greeting: "hi, I'm",
     /** Shown in the homepage stats row. */
-    yearsExperience: '15+',
+    yearsExperience: '16+',
     /** Shown under your name, in the accent gradient. */
-    role: 'Software engineer. Open-source builder.',
-    intro: "15+ years of building software, with a soft spot for architecture and design. " +
-           'These days I build small, fast, open-source tools — news readers with no ads or trackers, ' +
-           'a converter that never uploads your data, and soon a flight simulator for your architecture — ' +
-           'and write about Java, Spring Boot and the craft of software.',
+    role: 'Software engineer.',
+    /** Same as the short bio on my GitHub Sponsors profile. */
+    intro: 'Code, coffee, video games & music. My whole life in a nutshell :)',
+    /** Line after the intro that links to the about page. */
+    introMore: { text: 'Want to know more?', label: 'Read about me', href: '/about/' },
     /** Short about-me blurb near the bottom of the homepage; links to /about/. */
     aboutBlurb: "I've worn a few hats over the years: developer, chapter lead, and the person who asks " +
                 '"but why are we doing it this way?" in design meetings. I care about how systems are ' +
