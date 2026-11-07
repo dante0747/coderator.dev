@@ -1250,6 +1250,15 @@ img, video { max-width: 100%; height: auto; display: block; }
   -webkit-background-clip: text; background-clip: text; color: transparent;
 }
 .hero-intro { font-size: 1.04rem; color: var(--text-secondary); }
+.hero-intro:has(+ .hero-more) { margin-bottom: .6rem; }
+.hero-more {
+  font-family: var(--font-mono); font-size: .82rem;
+  color: var(--text-muted);
+  margin-bottom: 2rem;
+}
+.hero-more a { display: inline-flex; align-items: center; gap: .3rem; color: var(--cyan); }
+.hero-more a svg { width: 14px; height: 14px; transition: transform var(--t); }
+.hero-more a:hover svg { transform: translateX(3px); }
 .hero-kbd { font-family: var(--font-mono); font-size: .74rem; color: var(--text-muted); cursor: pointer; }
 .hero-kbd kbd { margin-left: .15rem; }
 
