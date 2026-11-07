@@ -307,9 +307,11 @@ function socialProfiles() {
  */
 function baseTemplate({ title, description, image = '', content, url = '', type = 'website', publishedTime = '',
                         jsonLd: customJsonLd = null, breadcrumbs = null, noindex = false, imageAlt = '' }) {
+  // Pages without their own image share the branded 1200×630 social card
   const ogImg = image
     ? `${config.baseUrl}/${image.replace(/^\//, '')}`
-    : `${config.baseUrl}/assets/images/avatar.png`;
+    : `${config.baseUrl}/assets/images/og-card.png`;
+  const ogSize = image ? '' : '\n  <meta property="og:image:width" content="1200">\n  <meta property="og:image:height" content="630">';
 
   const canonicalUrl = url || `${config.baseUrl}/`;
   const isHome = canonicalUrl === `${config.baseUrl}/`;
@@ -389,7 +391,7 @@ function baseTemplate({ title, description, image = '', content, url = '', type 
   const robots = noindex
     ? 'noindex, follow'
     : 'index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1';
-  const ogAlt = escHtml(imageAlt || (image ? title : config.author));
+  const ogAlt = escHtml(imageAlt || (image ? title : `${config.author}, ${(config.jobTitle || config.tagline).toLowerCase()}: ${config.title}`));
   const relMe = sameAs.map(href => `\n  <link rel="me" href="${href}">`).join('');
   const [firstName, ...rest] = config.author.split(' ');
   const profileMeta = type === 'profile'
@@ -438,13 +440,13 @@ function baseTemplate({ title, description, image = '', content, url = '', type 
   <meta name="theme-color" content="#07070b">
   <meta property="og:title" content="${escHtml(title)}">
   <meta property="og:description" content="${escHtml(description)}">
-  <meta property="og:image" content="${ogImg}">
+  <meta property="og:image" content="${ogImg}">${ogSize}
   <meta property="og:image:alt" content="${ogAlt}">
   <meta property="og:type" content="${type}">
   <meta property="og:url" content="${canonicalUrl}">
   <meta property="og:site_name" content="${escHtml(config.title)}">
   <meta property="og:locale" content="en_US">${articleMeta}${profileMeta}
-  <meta name="twitter:card" content="${image ? 'summary_large_image' : 'summary'}">
+  <meta name="twitter:card" content="summary_large_image">
   <meta name="twitter:title" content="${escHtml(title)}">
   <meta name="twitter:description" content="${escHtml(description)}">
   <meta name="twitter:image" content="${ogImg}">
