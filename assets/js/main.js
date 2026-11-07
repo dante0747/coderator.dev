@@ -312,7 +312,8 @@
 
 /* ─── Active nav link ─────────────────────────────────────────────────────────── */
 (function () {
-  const path = window.location.pathname;
+  // Blog posts live under /posts/ but belong to the "blog" nav item
+  const path = window.location.pathname.replace(/^\/posts\//, '/blog/');
   document.querySelectorAll('.nav-link').forEach(link => {
     const href = link.getAttribute('href');
     if (href === path || (href === '/' && path === '/') ||
@@ -321,11 +322,225 @@
     }
   });
 
-  // Hide the logo cursor on pages that have their own blinking cursor (about page)
+  // Hide the logo cursor on pages that have their own blinking cursor
   const logoCursor = document.querySelector('.site-logo .cursor');
-  if (logoCursor && path.startsWith('/about')) {
+  if (logoCursor && document.querySelector('.page-cmd-title')) {
     logoCursor.style.display = 'none';
   }
+})();
+
+/* ─── Command palette (⌘K / Ctrl+K / "/") and G-shortcuts ─────────────────────── */
+(function () {
+  const dataEl = document.getElementById('cmdk-data');
+  if (!dataEl) return;
+  let data;
+  try { data = JSON.parse(dataEl.textContent); } catch { return; }
+
+  const isMac = /Mac|iPhone|iPad/i.test(navigator.platform || navigator.userAgent);
+  document.querySelectorAll('.cmdk-kbd').forEach(k => { k.textContent = isMac ? '⌘K' : 'Ctrl K'; });
+
+  let root, input, list, results = [], active = 0, lastFocus = null;
+
+  const isTyping = el => el && (el.isContentEditable || /^(INPUT|TEXTAREA|SELECT)$/.test(el.tagName));
+
+  function el(tag, cls, text) {
+    const n = document.createElement(tag);
+    if (cls) n.className = cls;
+    if (text) n.textContent = text;
+    return n;
+  }
+
+  function mount() {
+    root = el('div', 'cmdk');
+    root.hidden = true;
+    root.innerHTML =
+      '<div class="cmdk-backdrop" data-close></div>' +
+      '<div class="cmdk-panel" role="dialog" aria-modal="true" aria-label="Search coderator.dev">' +
+        '<div class="cmdk-search">' + (data.icons.search || '') +
+          '<input class="cmdk-input" type="text" placeholder="Search projects and posts…"' +
+          'role="combobox" aria-expanded="true" aria-controls="cmdk-list" aria-autocomplete="list" autocomplete="off" spellcheck="false">' +
+          '<kbd>esc</kbd>' +
+        '</div>' +
+        '<ul class="cmdk-list" id="cmdk-list" role="listbox" aria-label="Results"></ul>' +
+        '<div class="cmdk-foot"><span><kbd>↑</kbd><kbd>↓</kbd>navigate</span><span><kbd>↵</kbd>open</span><span><kbd>esc</kbd>close</span></div>' +
+      '</div>';
+    document.body.appendChild(root);
+    input = root.querySelector('.cmdk-input');
+    list  = root.querySelector('.cmdk-list');
+
+    input.addEventListener('input', render);
+    input.addEventListener('keydown', onKey);
+    root.addEventListener('click', e => { if (e.target.closest('[data-close]')) close(); });
+    list.addEventListener('mousemove', e => {
+      const li = e.target.closest('.cmdk-item');
+      if (li && +li.dataset.i !== active) setActive(+li.dataset.i, false);
+    });
+    list.addEventListener('click', e => {
+      const li = e.target.closest('.cmdk-item');
+      if (li) go(results[+li.dataset.i], e.metaKey || e.ctrlKey);
+    });
+  }
+
+  function score(item, q) {
+    if (!q) return 1;
+    const title = item.t.toLowerCase();
+    const hay = [item.t, item.s, item.k, item.g].join(' ').toLowerCase();
+    if (title.startsWith(q)) return 4;
+    if (title.includes(q)) return 3;
+    return q.split(/\s+/).every(w => hay.includes(w)) ? 2 : 0;
+  }
+
+  function render() {
+    const q = input.value.trim().toLowerCase();
+    results = data.items
+      .map((it, idx) => ({ it, idx, sc: score(it, q) }))
+      .filter(r => r.sc > 0)
+      .sort((a, b) => (q ? b.sc - a.sc : 0) || a.idx - b.idx)
+      .map(r => r.it);
+
+    list.textContent = '';
+    if (!results.length) {
+      list.appendChild(el('li', 'cmdk-empty', 'No results for “' + input.value.trim() + '”'));
+      input.removeAttribute('aria-activedescendant');
+      return;
+    }
+
+    let group = null;
+    results.forEach((it, i) => {
+      if (!q && it.g !== group) {
+        group = it.g;
+        const h = el('li', 'cmdk-group', group);
+        h.setAttribute('role', 'presentation');
+        list.appendChild(h);
+      }
+      const li = el('li', 'cmdk-item');
+      li.id = 'cmdk-opt-' + i;
+      li.dataset.i = i;
+      li.setAttribute('role', 'option');
+      if (it.a) li.style.setProperty('--item-accent', it.a);
+
+      const ic = el('span', 'cmdk-icon');
+      if (it.img) {
+        const img = el('img'); img.src = it.img; img.alt = ''; ic.appendChild(img);
+      } else {
+        ic.innerHTML = data.icons[it.i] || '';
+      }
+      const text = el('span', 'cmdk-text');
+      text.appendChild(el('span', 'cmdk-title', it.t));
+      if (it.s) text.appendChild(el('span', 'cmdk-sub', it.s));
+
+      const meta = el('span', 'cmdk-meta');
+      if (it.sc && !q) it.sc.split(' ').forEach(k => meta.appendChild(el('kbd', '', k)));
+      else meta.textContent = q ? it.g.toLowerCase() : (it.x ? '↗' : '');
+
+      li.append(ic, text, meta);
+      list.appendChild(li);
+    });
+    setActive(0, true);
+  }
+
+  function setActive(i, scroll) {
+    active = (i + results.length) % results.length;
+    list.querySelectorAll('.cmdk-item').forEach(li => {
+      li.setAttribute('aria-selected', String(+li.dataset.i === active));
+    });
+    const cur = document.getElementById('cmdk-opt-' + active);
+    if (cur) {
+      input.setAttribute('aria-activedescendant', cur.id);
+      if (scroll) cur.scrollIntoView({ block: 'nearest' });
+    }
+  }
+
+  function go(item, newTab) {
+    if (!item) return;
+    close(false);
+    if (item.x || newTab) window.open(item.u, '_blank', 'noopener');
+    else window.location.href = item.u;
+  }
+
+  function onKey(e) {
+    if (e.key === 'ArrowDown') { e.preventDefault(); setActive(active + 1, true); }
+    else if (e.key === 'ArrowUp') { e.preventDefault(); setActive(active - 1, true); }
+    else if (e.key === 'Enter') { e.preventDefault(); go(results[active], e.metaKey || e.ctrlKey); }
+    else if (e.key === 'Escape') { e.preventDefault(); close(); }
+    else if (e.key === 'Tab') { e.preventDefault(); }
+  }
+
+  function open() {
+    if (!root) mount();
+    if (!root.hidden) return;
+    lastFocus = document.activeElement;
+    root.hidden = false;
+    document.documentElement.classList.add('cmdk-open');
+    input.value = '';
+    render();
+    input.focus();
+  }
+
+  function close(restoreFocus = true) {
+    if (!root || root.hidden) return;
+    input.blur();
+    root.hidden = true;
+    document.documentElement.classList.remove('cmdk-open');
+    if (restoreFocus && lastFocus && lastFocus !== document.body && lastFocus.focus) lastFocus.focus();
+  }
+
+  document.querySelectorAll('#cmdk-trigger, [data-cmdk-open]').forEach(b => b.addEventListener('click', open));
+
+  // G then H / P / B / A jumps to a page, like in many dev tools
+  const jumps = { h: '/', p: '/projects/', b: '/blog/', a: '/about/' };
+  let gPressedAt = 0;
+
+  document.addEventListener('keydown', e => {
+    if ((e.metaKey || e.ctrlKey) && e.key.toLowerCase() === 'k') {
+      e.preventDefault();
+      root && !root.hidden ? close() : open();
+      return;
+    }
+    if (isTyping(e.target) || e.metaKey || e.ctrlKey || e.altKey) return;
+    if (e.key === '/') { e.preventDefault(); open(); return; }
+
+    const k = e.key.toLowerCase();
+    if (k === 'g') { gPressedAt = Date.now(); return; }
+    if (jumps[k] && Date.now() - gPressedAt < 900) {
+      gPressedAt = 0;
+      if (window.location.pathname !== jumps[k]) window.location.href = jumps[k];
+    }
+  });
+})();
+
+/* ─── Pointer spotlight on cards ─────────────────────────────────────────────── */
+(function () {
+  if (!window.matchMedia || !window.matchMedia('(hover: hover)').matches) return;
+  document.addEventListener('pointermove', e => {
+    const card = e.target.closest && e.target.closest('.spotlight');
+    if (!card) return;
+    const r = card.getBoundingClientRect();
+    card.style.setProperty('--mx', (e.clientX - r.left) + 'px');
+    card.style.setProperty('--my', (e.clientY - r.top) + 'px');
+  }, { passive: true });
+})();
+
+/* ─── Relative "updated …" times ─────────────────────────────────────────────── */
+(function () {
+  const els = document.querySelectorAll('time[data-relative]');
+  if (!els.length || !window.Intl || !Intl.RelativeTimeFormat) return;
+
+  const rtf = new Intl.RelativeTimeFormat('en', { numeric: 'auto' });
+  const units = [
+    ['year', 31536000], ['month', 2592000], ['week', 604800],
+    ['day', 86400], ['hour', 3600], ['minute', 60],
+  ];
+
+  els.forEach(el => {
+    const then = new Date(el.getAttribute('datetime'));
+    if (isNaN(then)) return;
+    const secs = (then - Date.now()) / 1000;
+    const [unit, size] = units.find(([, s]) => Math.abs(secs) >= s) || ['minute', 60];
+    const prefix = el.dataset.relative ? el.dataset.relative + ' ' : '';
+    el.textContent = prefix + rtf.format(Math.round(secs / size), unit);
+    el.title = then.toLocaleString();
+  });
 })();
 
 

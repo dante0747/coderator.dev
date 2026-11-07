@@ -1,7 +1,9 @@
 # coderator.dev
 
-Personal tech blog about Java, Spring Boot, design patterns, and software craftsmanship.  
-Built with a zero-dependency custom static site generator.
+Personal site of Majid Abarghooei: an introduction, a portal to my open-source projects
+(GameBeeper, GeeksPulse, SpecLift, and soon ArchSim), and a blog about Java, Spring Boot,
+design patterns and software craftsmanship.  
+Built with a custom static site generator.
 
 ## Quick start
 
@@ -37,16 +39,54 @@ Your content here…
 
 3. Run `npm run build` (or let `npm run dev` pick it up automatically)
 
+## Adding or updating a project
+
+Each project is one file in `content/projects/`. The filename is the URL slug
+(`content/projects/speclift.md` → `/projects/speclift/`).
+
+```yaml
+---
+name: SpecLift
+order: 3                      # position on the homepage
+status: live                  # live | beta | soon ("soon" = teaser card, no page)
+hidden: false                 # true removes it from the site
+category: Swagger → OpenAPI converter
+tagline: "Short, punchy one-liner."
+summary: "Two sentences for the card and the page header."
+url: https://example.com/     # live site (optional)
+urlLabel: open converter      # button text (defaults to the domain)
+repo: dante0747/spec-lift     # GitHub repo, used for stars/license/updated
+accent: "#FF7A55"             # brand colour that tints the card and page
+logo: assets/images/projects/speclift-logo.svg
+image: assets/images/projects/speclift-cover.jpg   # 1200×630 works best
+stack: [TypeScript, React]
+stats:
+  - { value: "99/99", label: "APIs match Swagger" }
+tags: [speclift]              # blog posts with these tags show up on the project page
+---
+
+Markdown for the project page (## headings, lists, tables…).
+```
+
+Stars, license and last-updated dates come from the GitHub API at build time.
+Set `SKIP_GITHUB=1` to build offline. The deploy workflow also rebuilds daily so
+those numbers stay fresh.
+
+Homepage text (greeting, role, intro, about blurb, shared principles) lives in
+`config.js` under `portal`.
+
 ## Project structure
 
 ```
 content/
   posts/          ← blog posts (markdown)
   pages/          ← static pages (about, etc.)
+  projects/       ← one markdown file per open-source project
 assets/
   css/style.css   ← dark theme
   js/main.js      ← scroll bar, copy-code, mobile nav
   images/         ← images referenced by posts
+  images/projects ← project logos and preview images
 scripts/
   build.cmd       ← build shortcut (works without npm in PATH)
   preview.cmd     ← build + serve shortcut
