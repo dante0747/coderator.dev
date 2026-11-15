@@ -1,7 +1,7 @@
 # coderator.dev
 
 Personal site of Majid Abarghooei: an introduction, a portal to my open-source projects
-(GameBeeper, GeeksPulse, SpecLift, and soon ArchSim), and a blog about Java, Spring Boot,
+(GameBeeper, GeeksPulse, SpecLift and ArchSim), and a blog about Java, Spring Boot,
 design patterns and software craftsmanship.  
 Built with a custom static site generator.
 

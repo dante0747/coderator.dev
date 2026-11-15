@@ -672,7 +672,7 @@ function projectsBlock(projects) {
   const live = projects.filter(p => p.status !== 'soon');
   const soon = projects.filter(p => p.status === 'soon');
   return `
-      <div class="projects-grid">${live.map(projectCard).join('')}
+      <div class="projects-grid" data-count="${live.length}">${live.map(projectCard).join('')}
       </div>
       ${soon.map(projectTeaser).join('')}
       ${principlesHtml()}`;

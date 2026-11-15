@@ -30,10 +30,10 @@ module.exports = {
     /** Shared values shown under the project grid. */
     principles: [
       /* icon: one of eye-off | code | bolt | lock */
-      { icon: 'eye-off', title: 'No ads, no trackers', text: 'Nothing watches you read, convert or browse.' },
-      { icon: 'code',    title: 'Open source',         text: 'Permissive licenses. Read the code, fork it, send a PR.' },
-      { icon: 'bolt',    title: 'Static and fast',     text: 'Plain HTML, CSS and JS. No servers to wait on.' },
-      { icon: 'lock',    title: 'Private by design',   text: 'Your data stays in your browser.' },
+      { icon: 'eye-off', title: 'No ads, no trackers', text: 'Nothing watches you read, convert, browse or simulate.' },
+      { icon: 'code',    title: 'Open source',         text: 'Read the code, fork it, send a PR.' },
+      { icon: 'bolt',    title: 'No sign-up',          text: 'No accounts, no paywalls. Open it and use it.' },
+      { icon: 'lock',    title: 'Private by design',   text: 'Your data stays on your own device.' },
     ],
   },
   author: 'Majid Abarghooei',
