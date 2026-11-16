@@ -5,6 +5,7 @@ status: live
 category: distributed systems simulator
 tagline: "Crash-test your architecture before your users do."
 summary: "A flight simulator for distributed systems. Draw your stack with real technologies, throw traffic and failures at it, and get a straight yes or no, with the bottleneck, the breaking point and the monthly bill."
+url: https://archsim.io/
 repo: dante0747/archsim
 accent: "#3D9BFF"
 accent2: "#BF5AF2"
@@ -56,8 +57,10 @@ times faster.
 
 ## Try it
 
-With Docker installed, clone the repository and run `docker compose up`, then open
-`http://localhost:3000`. No account and no telemetry.
+Open the live demo at [app.archsim.io](https://app.archsim.io/) and sign in with GitHub, or run
+it yourself: with Docker installed, clone the repository and run `docker compose up`, then open
+`http://localhost:3000`, with no account and no telemetry. The documentation and the accuracy
+report are on [archsim.io](https://archsim.io/).
 
 ## Get involved
 
