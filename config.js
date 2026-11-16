@@ -2,13 +2,13 @@
 module.exports = {
   title: 'coderator.dev',
   /** Default meta description (homepage, RSS); keep it under ~155 characters for search results. */
-  description: 'Software engineer Majid Abarghooei: open-source projects (GameBeeper, GeeksPulse, SpecLift) and writing on Java, Spring Boot and software design.',
+  description: 'Software engineer Majid Abarghooei: open-source projects (GameBeeper, GeeksPulse, SpecLift, ArchSim) and writing on Java, Spring Boot and software design.',
   tagline: 'software engineer',
 
   /** Used in search-engine structured data (schema.org Person). */
   jobTitle: 'Software Engineer',
   personDescription: 'Software engineer with 16+ years of experience in software architecture and design, ' +
-                     'and creator of the open-source projects GameBeeper, GeeksPulse and SpecLift.',
+                     'and creator of the open-source projects GameBeeper, GeeksPulse, SpecLift and ArchSim.',
   knowsAbout: ['Software architecture', 'Software design', 'Design patterns', 'Java', 'Spring Boot',
                'Distributed systems', 'Open source'],
 
